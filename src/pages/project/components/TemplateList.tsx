@@ -52,11 +52,10 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
   };
 
   createTemplate = () => {
-    message.success("响应点击事件");
-    // this.setState({
-    //   visible: true,
-    //   template: {},
-    // });
+    this.setState({
+      visible: true,
+      template: {},
+    });
   };
 
   render() {
@@ -72,7 +71,7 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
         dataIndex: 'type',
         render: (value: any) => {
           const types = ['dockerfile', 'nginx', 'k8s'];
-          return <span>{types[value]}</span>
+          return <span>{types[value]}</span>;
         },
       },
       {
@@ -89,13 +88,15 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
       },
     ];
     return <>
-      <Button
-        type="primary"
-        style={{ marginBottom: 20 }}
-        onClick={this.createTemplate}
-      >
-        新建模板
-      </Button>
+      <div style={{ height: 50 }}>
+        <Button
+          type="primary"
+          onClick={this.createTemplate}
+          style={{ float: 'right', marginBottom: 20 }}
+        >
+          新建模板
+        </Button>
+      </div>
       <Table
         rowKey='id'
         columns={columns}

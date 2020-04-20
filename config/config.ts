@@ -87,6 +87,12 @@ export default defineConfig({
                   component: './resource/cloud/index',
                 },
                 {
+                  path: '/resource/k8s',
+                  name: 'k8s',
+                  icon: 'RadarChartOutlined',
+                  component: './resource/k8s/index',
+                },
+                {
                   path: '/resource/database/',
                   name: '数据库',
                   icon: 'DatabaseOutlined',
@@ -119,6 +125,12 @@ export default defineConfig({
                   component: './build/start/index',
                 },
                 {
+                  path: '/build/image',
+                  name: '镜像中心',
+                  icon: 'CloudUploadOutlined',
+                  component: './build/image/index',
+                },
+                {
                   path: '/build/log',
                   name: '构建日志',
                   icon: 'PieChartOutlined',
@@ -128,9 +140,9 @@ export default defineConfig({
             },
             {
               path: '/deploy',
-              name: '发版',
+              name: '发布',
               icon: 'RocketOutlined',
-              component: './deploy/index'
+              component: './deploy/index',
             },
             {
               component: './404',

@@ -21,7 +21,7 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      mode: modes[this.props.template.type],
+      mode: modes[this.props.template.type] || modes[0],
     };
   }
 
