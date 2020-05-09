@@ -1,19 +1,19 @@
 import { Select } from 'antd';
 import React, { Component } from 'react';
-import { dbInstIpList } from '@/services/database';
+import { listHost } from '@/services/host';
 
 const { Option } = Select;
 
-interface InstSelectProps {
+interface HostSelectProps {
   value?: any;
   onChange?: any;
 }
 
-interface InstSelectState {
+interface HostSelectState {
   data: any;
 }
 
-class InstSelect extends Component<InstSelectProps, InstSelectState> {
+class HostSelect extends Component<HostSelectProps, HostSelectState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ class InstSelect extends Component<InstSelectProps, InstSelectState> {
   }
 
   componentDidMount(): void {
-    dbInstIpList().then(response => {
+    listHost().then(response => {
       if (response.status === 0) {
         this.setState({
           data: response.data,
@@ -38,12 +38,12 @@ class InstSelect extends Component<InstSelectProps, InstSelectState> {
       allowClear
     >
       {
-        this.state.data.map((inst: any) => (
-          <Option value={inst.id} key={inst.id}>{inst.ip}({inst.user_name})</Option>
+        this.state.data.map((host: any) => (
+          <Option value={host.id} key={host.id}>{host.name}({host.public_ip})</Option>
         ))
       }
     </Select>;
   }
 }
 
-export default InstSelect;
+export default HostSelect;

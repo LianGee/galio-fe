@@ -8,15 +8,12 @@ interface TemplateProps {
 }
 
 interface TemplateState {
-  data: any;
 }
 
 class Template extends Component<TemplateProps, TemplateState> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      data: [],
-    };
+    this.state = {};
   }
 
   componentDidMount(): void {

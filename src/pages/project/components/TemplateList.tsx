@@ -1,7 +1,7 @@
-import { Button, message, Modal, Table } from 'antd';
+import { Button, message, Modal, Table, Tag } from 'antd';
 import React, { Component } from 'react';
 
-import { getTemplateById, getTemplates, saveTemplate } from '@/services/templates';
+import { getTemplateById, getTemplates, saveTemplate, deleteTemplate } from '@/services/templates';
 import TemplateForm from '@/pages/project/components/TemplateForm';
 
 interface TemplateListProps {
@@ -11,6 +11,7 @@ interface TemplateListState {
   visible: boolean;
   template: any;
   data: [],
+  loading: boolean;
 }
 
 class TemplateList extends Component<TemplateListProps, TemplateListState> {
@@ -22,6 +23,7 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
       visible: false,
       template: {},
       data: [],
+      loading: false,
     };
   }
 
@@ -41,11 +43,13 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
   };
 
   init = () => {
+    this.setState({ loading: true });
     getTemplates(null).then((response: any) => {
       if (response.status === 0) {
         this.setState({
           data: response.data,
           visible: false,
+          loading: false,
         });
       }
     });
@@ -55,6 +59,20 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
     this.setState({
       visible: true,
       template: {},
+    });
+  };
+
+  deleteTemplate = (record: any) => {
+    Modal.confirm({
+      title: `删除${record.name}`,
+      onOk: () => {
+        deleteTemplate(record.id).then(response => {
+          if (response.status === 0) {
+            this.init();
+            message.success('删除成功');
+          }
+        });
+      },
     });
   };
 
@@ -71,7 +89,10 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
         dataIndex: 'type',
         render: (value: any) => {
           const types = ['dockerfile', 'nginx', 'k8s'];
-          return <span>{types[value]}</span>;
+          const colors = ['#2db7f5', '#87d068', '#108ee9'];
+          return <Tag
+            color={colors[value]}
+          >{types[value]}</Tag>;
         },
       },
       {
@@ -81,9 +102,13 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
       },
       {
         title: '操作',
-        render: (value: any) => <>
-          <Button size="small" onClick={() => this.edit(value)}>编辑</Button>
-          <Button size="small" style={{ marginLeft: 10 }}>删除</Button>
+        render: (record: any) => <>
+          <Button size="small" onClick={() => this.edit(record)}>编辑</Button>
+          <Button
+            size="small"
+            style={{ marginLeft: 10 }}
+            onClick={() => this.deleteTemplate(record)}
+          >删除</Button>
         </>,
       },
     ];
@@ -101,6 +126,7 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
         rowKey='id'
         columns={columns}
         dataSource={this.state.data}
+        loading={this.state.loading}
       />
       <Modal
         title="编辑模板"
@@ -130,4 +156,3 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
 }
 
 export default TemplateList;
-;

@@ -57,25 +57,6 @@ export default defineConfig({
               redirect: '/project',
             },
             {
-              path: '/project',
-              name: '项目',
-              icon: 'AppstoreOutlined',
-              routes: [
-                {
-                  path: '/project/manager',
-                  name: '项目管理',
-                  icon: 'SettingOutlined',
-                  component: './project/manager/index',
-                },
-                {
-                  path: '/project/template',
-                  name: '模板管理',
-                  icon: 'FontSizeOutlined',
-                  component: './project/template/index',
-                },
-              ],
-            },
-            {
               path: '/resource',
               name: '资源',
               icon: 'CloudOutlined',
@@ -110,6 +91,26 @@ export default defineConfig({
                       component: './resource/database/query/index',
                     },
                   ],
+                },
+              ],
+            },
+            {
+              path: '/project',
+              name: '项目',
+              icon: 'AppstoreOutlined',
+              routes: [
+                {
+                  path: '/project/manager',
+                  name: '项目管理',
+                  icon: 'SettingOutlined',
+                  component: './project/manager/index',
+                },
+
+                {
+                  path: '/project/template',
+                  name: '模板管理',
+                  icon: 'FontSizeOutlined',
+                  component: './project/template/index',
                 },
               ],
             },

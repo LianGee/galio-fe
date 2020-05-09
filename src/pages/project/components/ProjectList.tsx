@@ -12,9 +12,20 @@ interface ProjectListState {
   visible: boolean;
   data: any;
   initialValues: any;
+  title: any;
 }
 
 const { Paragraph } = Typography;
+const initialValues = {
+  namespace: 'default',
+  type: 0,
+  base_image: 'nginx',
+  dockerfile_type: 1,
+  nginx_proxies: [
+    { rule: '^api', server: '' },
+  ],
+  service_type: 0,
+};
 
 class ProjectList extends Component<ProjectListProps, ProjectListState> {
   constructor(props: any) {
@@ -22,10 +33,8 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
     this.state = {
       visible: false,
       data: [],
-      initialValues: {
-        type: 0,
-        base_image: 'nginx',
-      },
+      initialValues,
+      title: '新建项目',
     };
   }
 
@@ -39,10 +48,6 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
         this.setState({
           data: response.data.concat({}),
           visible: false,
-          initialValues: {
-            type: 0,
-            base_image: 'nginx',
-          },
         });
       } else {
         message.error(response.msg);
@@ -53,10 +58,8 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
   addProject = () => {
     this.setState({
       visible: true,
-      initialValues: {
-        type: 0,
-        base_image: 'nginx',
-      },
+      title: '新建项目',
+      initialValues,
     });
   };
 
@@ -78,7 +81,7 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
   };
 
   editProject = (project: any) => {
-    this.setState({ visible: true, initialValues: project });
+    this.setState({ visible: true, initialValues: project, title: '修改项目' });
   };
 
   render() {
@@ -108,7 +111,7 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
                     }
                     description={item.description}
                   />
-                  <Descriptions column={1} bordered size="small">
+                  <Descriptions column={1} bordered size="small" style={{ marginTop: 20 }}>
                     <Descriptions.Item label="owner">
                       {item.user_name}
                     </Descriptions.Item>
@@ -149,6 +152,7 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
         onCancel={this.onCancel}
         onOk={this.onOk}
         initialValues={this.state.initialValues}
+        title={this.state.title}
       />
     </>;
   }

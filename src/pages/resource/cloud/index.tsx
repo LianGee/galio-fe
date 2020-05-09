@@ -1,23 +1,30 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import * as React from 'react';
-import { Table } from 'antd';
+import DomainManager from '@/pages/resource/components/DomainManager';
+import HostManager from '@/pages/resource/components/HostManager';
 
-class Cloud extends Component {
+
+interface CloudProps {
+
+}
+
+interface CloudState {
+}
+
+class Cloud extends Component<CloudProps, CloudState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {};
+  }
+
   componentDidMount(): void {
+
   }
 
   render() {
-    const columns = [
-      { title: '集群', dataIndex: 'group', keyIndex: 'group' },
-      { title: '名称', dataIndex: 'name', keyIndex: 'name' },
-      { title: 'ip', dataIndex: 'ip', keyIndex: 'ip' },
-    ];
     return <PageHeaderWrapper title={false}>
-      <Table
-        columns={columns}
-        dataSource={[]}
-      />
+      <HostManager/>
+      <DomainManager/>
     </PageHeaderWrapper>;
   }
 }

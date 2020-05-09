@@ -18,3 +18,9 @@ export async function saveTemplate(template: any) {
     data: template,
   });
 }
+
+export async function deleteTemplate(id: any) {
+  return request(`/api/template/delete?template_id=${id}`, {
+    method: 'delete',
+  });
+}

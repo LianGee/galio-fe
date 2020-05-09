@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Form } from 'antd';
 import ProjectSelect from '@/pages/build/components/ProjectSelect';
 import ImageSelect from '@/pages/deploy/components/ImageSelect';
-import { deploy } from '@/services/deploy';
 
 const layout = {
   labelCol: { span: 2 },
@@ -14,10 +13,11 @@ const tailLayout = {
 
 interface DeployFormProps {
   selectProject: any;
+  deploy: any;
+  loading: boolean;
 }
 
 interface DeployFormState {
-
 }
 
 class DeployForm extends Component<DeployFormProps, DeployFormState> {
@@ -27,11 +27,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   }
 
   onFinish = (values: any) => {
-    deploy(values).then(response => {
-      if (response.status === 0) {
-        console.log(response.data);
-      }
-    });
+    this.props.deploy(values);
   };
 
   onChange = (value: any) => {
@@ -58,7 +54,11 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
         <ImageSelect/>
       </Form.Item>
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={this.props.loading}
+        >
           发布
         </Button>
       </Form.Item>

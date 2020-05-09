@@ -8,6 +8,7 @@ import Node from '@/pages/resource/k8s/components/Node';
 import Pod from '@/pages/resource/k8s/components/Pod';
 import ReplicaSet from '@/pages/resource/k8s/components/ReplicaSet';
 import Deployment from '@/pages/resource/k8s/components/Deployment';
+import Service from '@/pages/resource/k8s/components/Service';
 
 const {Panel} = Collapse;
 
@@ -32,6 +33,9 @@ class K8s extends Component {
         </Panel>
         <Panel header="Deployments" key={6}>
           <Deployment/>
+        </Panel>
+        <Panel header="Services" key={7}>
+          <Service/>
         </Panel>
       </Collapse>
     </PageHeaderWrapper>;

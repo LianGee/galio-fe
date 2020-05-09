@@ -61,7 +61,7 @@ request.interceptors.response.use(async response => {
   if (data && data.status === 30200) {
     window.location.href = data.data;
   }
-  if (data.status !== 0 && data.msg) {
+  if (data.status !== 0 && data.status !== 30200 && data.msg) {
     message.error(data.msg);
   }
   return response;

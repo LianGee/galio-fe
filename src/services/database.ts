@@ -23,3 +23,16 @@ export async function query(params: any) {
     data: params,
   });
 }
+
+export async function saveDBInst(params: any) {
+  return request('/api/db_inst/save', {
+    method: 'post',
+    data: params,
+  });
+}
+
+export async function deleteDBInst(id: any) {
+  return request(`/api/db_inst/delete?inst_id=${id}`, {
+    method: 'delete',
+  })
+}
