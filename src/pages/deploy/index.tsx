@@ -27,46 +27,55 @@ class Deploy extends Component<DeployProps, DeployState> {
     };
   }
 
-  componentDidMount(): void {
-    this.getPodStatus(undefined);
-  }
-
   selectProject = (value: any) => {
-    const { interval } = this.state;
-    if (interval) {
-      clearInterval(interval);
-    }
-    if (value) {
+    if (value !== undefined) {
       this.getPodStatus(value);
-      // this.setState({
-      //   interval: setInterval(() => {
-      //     this.getPodStatus(value);
-      //   }, 500),
-      // });
     }
   };
 
-  getPodStatus = (value: any) => {
-    this.setState({ podLoading: true });
-    listContainerStatus(value).then(response => {
+  getPodStatus = (project_id: any) => {
+    const { interval } = this.state;
+    listContainerStatus(project_id).then(response => {
       if (response.status === 0) {
+        let status = true;
+        for (let i = 0; i < response.data.length; i += 1) {
+          const { events } = response.data[i];
+          console.log(events);
+          if (events !== null) {
+            for (let j = 0; j < events.length; j += 1) {
+              if (events[j].type !== 'Normal' ||
+                events[j].reason === 'Killing') {
+                status = false;
+                break;
+              }
+            }
+          }
+        }
         this.setState({
           podStatuses: response.data,
-          podLoading: false,
+          podLoading: !status,
         });
+        setTimeout(() => {
+          if (status) {
+            clearInterval(interval);
+          }
+        }, 2000);
       }
-    }).catch(() => {
     });
   };
 
   deploy = (values: any) => {
     this.setState({
       loading: true,
+      podLoading: true,
     });
     deploy(values).then(response => {
       if (response.status === 0) {
         this.setState({
           loading: false,
+          interval: setInterval(() => {
+            this.getPodStatus(values.project_id);
+          }, 2000),
         });
       }
     });

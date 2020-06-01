@@ -12,18 +12,30 @@ interface ProxyInputProps {
 interface ProxyInputState {
   rule: any;
   server: any;
+  name: any;
 }
 
 class ProxyInput extends Component<ProxyInputProps, ProxyInputState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      ...props.value
+      ...props.value,
     };
   }
 
+  onNameChange = (e: any) => {
+    const data = {
+      name: e.target.value,
+      rule: this.state.rule,
+      server: this.state.server,
+    };
+    this.setState({...data});
+    this.props.onChange({ ...data });
+  };
+
   onRuleChange = (e: any) => {
     const data = {
+      name: this.state.name,
       rule: e.target.value,
       server: this.state.server,
     };
@@ -33,6 +45,7 @@ class ProxyInput extends Component<ProxyInputProps, ProxyInputState> {
 
   onServerChange = (e: any) => {
     const data = {
+      name: this.state.name,
       rule: this.state.rule,
       server: e.target.value,
     };
@@ -43,14 +56,21 @@ class ProxyInput extends Component<ProxyInputProps, ProxyInputState> {
   render() {
     const { field, remove } = this.props;
     return <Row>
-      <Col span={6}>
+      <Col span={5}>
+        <Input
+          placeholder="代理名"
+          onChange={this.onNameChange}
+          defaultValue={this.props.value ? this.props.value.name : ''}
+        />
+      </Col>
+      <Col span={5}>
         <Input
           placeholder="匹配规则"
           onChange={this.onRuleChange}
           defaultValue={this.props.value ? this.props.value.rule : ''}
         />
       </Col>
-      <Col span={16}>
+      <Col span={12}>
         <Input
           placeholder="转发服务"
           onChange={this.onServerChange}

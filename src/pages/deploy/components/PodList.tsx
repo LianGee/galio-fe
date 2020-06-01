@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Badge, Button, Modal, Table, Tag } from 'antd';
+import { Badge, Button, Modal, Table, Tag, Spin } from 'antd';
 import * as moment from 'moment';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sh';
@@ -117,14 +117,16 @@ class PodList extends Component<PodListProps, PodListState> {
         dataIndex: 'phase',
         keyIndex: 'phase',
         render: (value: any, record: any) => (
-          <Tag color={
-            record.events && record.events.filter(
-              (item: any) => item.type === 'Warning',
-            ).length > 0 ?
-              '#f50' : '#87d068'
-          }>
-            {value}
-          </Tag>
+          <Spin spinning={this.props.loading}>
+            <Tag color={
+              record.events && record.events.filter(
+                (item: any) => item.type === 'Warning',
+              ).length > 0 ?
+                '#f50' : '#87d068'
+            }>
+              {value}
+            </Tag>
+          </Spin>
         ),
       },
       {
@@ -154,7 +156,6 @@ class PodList extends Component<PodListProps, PodListState> {
         dataSource={this.props.podStatuses}
         size="large"
         bordered
-        loading={this.props.loading}
         expandable={{
           expandedRowRender: (record: any) => (
             <Table
@@ -167,11 +168,6 @@ class PodList extends Component<PodListProps, PodListState> {
               size="small"
             />
           ),
-        }}
-        rowSelection={{
-          onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-          },
         }}
       />
       <Modal

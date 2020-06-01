@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-export async function getBranches() {
-  return request('/api/build/branches');
+export async function getBranches(project_id: any) {
+  return request(`/api/build/branches?project_id=${project_id}`);
 }
 
 export async function build(params: any) {

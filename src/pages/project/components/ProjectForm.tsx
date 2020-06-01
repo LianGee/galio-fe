@@ -51,9 +51,8 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
     }
   }
 
-  onValuesChange = (changedValues: any, allValues: any) => {
+  onValuesChange = (changedValues: any) => {
     const { dockerfile_type } = changedValues;
-    console.log(changedValues, allValues);
     if (dockerfile_type !== undefined) {
       this.setState({
         dockerfileType: dockerfile_type,

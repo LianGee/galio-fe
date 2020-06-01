@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar, Card, Descriptions, List, message, Typography } from 'antd';
-import { DeleteOutlined, FormOutlined, HomeOutlined } from '@ant-design/icons/lib';
+import { CiCircleOutlined, DeleteOutlined, FormOutlined, HomeOutlined, RocketOutlined } from '@ant-design/icons/lib';
 import ProjectForm from '@/pages/project/components/ProjectForm';
 import { list, save } from '@/services/project';
 
@@ -98,6 +98,8 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
                   actions={[
                     <DeleteOutlined/>,
                     <FormOutlined onClick={() => this.editProject(item)}/>,
+                    <CiCircleOutlined/>,
+                    <RocketOutlined/>,
                     <HomeOutlined onClick={() => {
                       window.open(`http://${item.domain}`);
                     }}/>,
@@ -121,15 +123,15 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
                     <Descriptions.Item label="类型">
                       {item.type === 0 ? '前端' : '后端'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="git">
-                      <div style={{ width: 180 }}>
+                    <Descriptions.Item label="内部域名">
+                      <div style={{ width: 160 }}>
                         <Paragraph
                           copyable
                           ellipsis={{
                             rows: 1,
                           }}
                         >
-                          {item.git}
+                          {item.service_domain}
                         </Paragraph>
                       </div>
                     </Descriptions.Item>

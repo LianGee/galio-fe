@@ -54,45 +54,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/project',
-            },
-            {
-              path: '/resource',
-              name: '资源',
-              icon: 'CloudOutlined',
-              routes: [
-                {
-                  path: '/resource/cloud',
-                  name: '云主机',
-                  icon: 'CloudServerOutlined',
-                  component: './resource/cloud/index',
-                },
-                {
-                  path: '/resource/k8s',
-                  name: 'k8s',
-                  icon: 'RadarChartOutlined',
-                  component: './resource/k8s/index',
-                },
-                {
-                  path: '/resource/database/',
-                  name: '数据库',
-                  icon: 'DatabaseOutlined',
-                  routes: [
-                    {
-                      name: '实例',
-                      path: '/resource/database/instance',
-                      icon: 'CodepenOutlined',
-                      component: './resource/database/instance/index',
-                    },
-                    {
-                      name: '查询',
-                      path: '/resource/database/query',
-                      icon: 'ConsoleSqlOutlined',
-                      component: './resource/database/query/index',
-                    },
-                  ],
-                },
-              ],
+              redirect: '/project/manager',
             },
             {
               path: '/project',
@@ -143,7 +105,52 @@ export default defineConfig({
               path: '/deploy',
               name: '发布',
               icon: 'RocketOutlined',
-              component: './deploy/index',
+              routes: [
+                {
+                  path: '/deploy/start',
+                  name: '开始发布',
+                  icon: 'PlayCircleOutlined',
+                  component: './deploy/index'
+                }
+              ]
+            },
+            {
+              path: '/resource',
+              name: '资源',
+              icon: 'CloudOutlined',
+              routes: [
+                {
+                  path: '/resource/cloud',
+                  name: '云主机',
+                  icon: 'CloudServerOutlined',
+                  component: './resource/cloud/index',
+                },
+                {
+                  path: '/resource/k8s',
+                  name: 'k8s',
+                  icon: 'RadarChartOutlined',
+                  component: './resource/k8s/index',
+                },
+              ],
+            },
+            {
+              path: '/database/',
+              name: '数据库',
+              icon: 'DatabaseOutlined',
+              routes: [
+                {
+                  name: '实例',
+                  path: '/database/instance',
+                  icon: 'CodepenOutlined',
+                  component: './resource/database/instance/index',
+                },
+                {
+                  name: '查询',
+                  path: '/database/query',
+                  icon: 'ConsoleSqlOutlined',
+                  component: './resource/database/query/index',
+                },
+              ],
             },
             {
               component: './404',

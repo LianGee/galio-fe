@@ -1,13 +1,14 @@
 import { Select } from 'antd';
 import * as React from 'react';
 import { Component } from 'react';
-import { listImage } from '@/services/docker';
+import { listProjectImage } from '@/services/docker';
 
 const { Option } = Select;
 
 interface ImageSelectProps {
   onChange?: any;
   value?: any;
+  project_id: any;
 }
 
 interface ImageSelectState {
@@ -20,12 +21,19 @@ class ImageSelect extends Component<ImageSelectProps, ImageSelectState> {
     super(props);
     this.state = {
       images: [],
-      loading: true,
+      loading: false,
     };
   }
 
-  componentDidMount(): void {
-    listImage().then(response => {
+  componentWillReceiveProps(nextProps: any): void {
+    if (this.props.project_id !== nextProps.project_id) {
+      this.init(nextProps.project_id);
+    }
+  }
+
+  init = (project_id: any) => {
+    this.setState({ loading: true });
+    listProjectImage(project_id).then(response => {
       if (response.status === 0) {
         this.setState({
           loading: false,
@@ -33,7 +41,7 @@ class ImageSelect extends Component<ImageSelectProps, ImageSelectState> {
         });
       }
     });
-  }
+  };
 
   render() {
     return <Select
