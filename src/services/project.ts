@@ -10,3 +10,7 @@ export async function save(params: any) {
 export async function list() {
   return request('/api/project/list');
 }
+
+export async function queryProjectById(project_id: number) {
+  return request(`/api/project/query?project_id=${project_id}`);
+}

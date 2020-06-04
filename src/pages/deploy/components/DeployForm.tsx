@@ -15,6 +15,7 @@ interface DeployFormProps {
   selectProject: any;
   deploy: any;
   loading: boolean;
+  defaultValues: {};
 }
 
 interface DeployFormState {
@@ -56,6 +57,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
       onFinish={this.onFinish}
       onValuesChange={this.onValueChange}
       ref={this.form}
+      initialValues={this.props.defaultValues}
     >
       <Form.Item
         label="项目"

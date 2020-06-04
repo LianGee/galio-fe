@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Badge, Button, Modal, Table, Tag, Spin } from 'antd';
+import { Badge, Button, Modal, Table, Tag } from 'antd';
 import * as moment from 'moment';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sh';
@@ -8,7 +8,6 @@ import { readLogOfPod } from '@/services/deploy';
 
 interface PodListProps {
   podStatuses: any;
-  loading: any;
 }
 
 interface PodListState {
@@ -117,16 +116,14 @@ class PodList extends Component<PodListProps, PodListState> {
         dataIndex: 'phase',
         keyIndex: 'phase',
         render: (value: any, record: any) => (
-          <Spin spinning={this.props.loading}>
-            <Tag color={
-              record.events && record.events.filter(
-                (item: any) => item.type === 'Warning',
-              ).length > 0 ?
-                '#f50' : '#87d068'
-            }>
-              {value}
-            </Tag>
-          </Spin>
+          <Tag color={
+            record.events && record.events.filter(
+              (item: any) => item.type === 'Warning',
+            ).length > 0 ?
+              '#f50' : '#87d068'
+          }>
+            {value}
+          </Tag>
         ),
       },
       {
