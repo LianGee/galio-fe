@@ -59,6 +59,7 @@ class Deploy extends Component<DeployProps, DeployState> {
     socket.emit('pod', { project_id });
     socket.emit('replica', { project_id });
     socket.on('pod', (data: any) => {
+      console.log(get_pods_info(data));
       this.setState({ pods: get_pods_info(data) });
     });
     socket.on('replica', (data: any) => {

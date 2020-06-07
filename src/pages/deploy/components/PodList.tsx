@@ -46,16 +46,16 @@ class PodList extends Component<PodListProps, PodListState> {
         title: '状态',
         dataIndex: 'phase',
         keyIndex: 'phase',
-        render: (value: any, record: any) => (
-          <Tag color={
-            record.events && record.events.filter(
-              (item: any) => item.type === 'Warning',
-            ).length > 0 ?
-              '#f50' : '#87d068'
-          }>
+        render: (value: any) => {
+          // todo any other phase
+          const colors = {
+            'Pending': '#108ee9',
+            'Running': '#87d068',
+          };
+          return <Tag color={colors[value]}>
             {value}
-          </Tag>
-        ),
+          </Tag>;
+        },
       },
       {
         title: '启动时间',
