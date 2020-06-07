@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Badge, Button, Modal, Table, Tag } from 'antd';
-import * as moment from 'moment';
+import { Button, Modal, Table, Tag } from 'antd';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sh';
 import 'ace-builds/src-noconflict/theme-github';
-import { readLogOfPod } from '@/services/deploy';
 
 interface PodListProps {
-  podStatuses: any;
+  pods: any;
 }
 
 interface PodListState {
@@ -33,84 +31,17 @@ class PodList extends Component<PodListProps, PodListState> {
   }
 
   readLog = (record: any) => {
-    const interval = setInterval(() => {
-      readLogOfPod({
-        ...record,
-        previous: false,
-      }).then(response => {
-        if (response.status === 0) {
-          this.setState({
-            log: response.data,
-          });
-        }
-      });
-    }, 1000);
-    this.setState({
-      visible: true,
-      pod: record,
-      interval,
-    });
+    console.log(record);
   };
 
   readPreviousLog = () => {
-    const { pod } = this.state;
-    readLogOfPod({
-      ...pod,
-      previous: true,
-    }).then(response => {
-      if (response.status === 0) {
-        this.setState({
-          log: response.data,
-        });
-      }
-    });
   };
 
   render() {
-    const eventColumns = [
-      {
-        title: '时间',
-        dataIndex: 'created_at',
-        keyIndex: 'created_at',
-        render: (value: any) => <span>{moment.unix(value).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '类型',
-        dataIndex: 'type',
-        keyIndex: 'type',
-        width: 100,
-        render: (value: any) => {
-          return <Badge
-            status={value === 'Warning' ? 'error' : 'success'}
-            text={value}
-          />;
-        },
-      },
-      {
-        title: '理由',
-        dataIndex: 'reason',
-        keyIndex: 'reason',
-        render: (value: any, record: any) => {
-          return <Tag color={record.type === 'Warning' ? '#f50' : '#87d068'}>
-            {value}
-          </Tag>;
-        },
-      },
-      {
-        title: '消息',
-        dataIndex: 'message',
-        keyIndex: 'message',
-        render: (value: any, record: any) => {
-          return <span style={{ color: record.type === 'Warning' ? '#f50' : '#87d068' }}>
-            {value}
-          </span>;
-        },
-      },
-    ];
     const columns = [
       { title: 'pod', dataIndex: 'name', keyIndex: 'name' },
-      { title: '宿主机', dataIndex: 'host_ip', keyIndex: 'host_ip' },
-      { title: '容器ip', dataIndex: 'pod_ip', keyIndex: 'pod_ip' },
+      { title: '宿主机', dataIndex: 'hostIP', keyIndex: 'hostIP' },
+      { title: '容器ip', dataIndex: 'podIp', keyIndex: 'podIp' },
       {
         title: '状态',
         dataIndex: 'phase',
@@ -128,11 +59,10 @@ class PodList extends Component<PodListProps, PodListState> {
       },
       {
         title: '启动时间',
-        dataIndex: 'start_time',
-        keyIndex: 'start_time',
-        render: (value: any) => <span>{moment.unix(value).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        dataIndex: 'startTime',
+        keyIndex: 'startTime',
       },
-      { title: '重启', dataIndex: 'restart_count', keyIndex: 'restart_count' },
+      { title: '重启', dataIndex: 'hostIP', keyIndex: 'hostIP' },
       {
         title: '操作',
         width: 150,
@@ -148,24 +78,11 @@ class PodList extends Component<PodListProps, PodListState> {
     ];
     return <div>
       <Table
-        rowKey="uid"
+        rowKey="name"
         columns={columns}
-        dataSource={this.props.podStatuses}
+        dataSource={this.props.pods}
         size="large"
         bordered
-        expandable={{
-          expandedRowRender: (record: any) => (
-            <Table
-              showHeader={false}
-              columns={eventColumns}
-              dataSource={record.events}
-              pagination={false}
-              rowKey="name"
-              bordered={false}
-              size="small"
-            />
-          ),
-        }}
       />
       <Modal
         visible={this.state.visible}
