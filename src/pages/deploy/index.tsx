@@ -6,7 +6,7 @@ import PodList from '@/pages/deploy/components/PodList';
 import { deploy } from '@/services/deploy';
 import { Avatar, Badge, Card, Result } from 'antd';
 import { queryProjectById } from '@/services/project';
-import { SmileOutlined } from '@ant-design/icons';
+import { SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
 
@@ -59,7 +59,6 @@ class Deploy extends Component<DeployProps, DeployState> {
     socket.emit('pod', { project_id });
     socket.emit('replica', { project_id });
     socket.on('pod', (data: any) => {
-      console.log(get_pods_info(data));
       this.setState({ pods: get_pods_info(data) });
     });
     socket.on('replica', (data: any) => {
@@ -97,7 +96,7 @@ class Deploy extends Component<DeployProps, DeployState> {
             </>}
             extra={<div>
               <span style={{ marginRight: 8 }}>
-                当前镜像: {this.state.replica.image}
+                <TagOutlined style={{ color: '#108ee9' }}/> {this.state.replica.image}
               </span>
               {
                 this.state.replica.status ?
