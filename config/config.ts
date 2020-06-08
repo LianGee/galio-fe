@@ -125,12 +125,6 @@ export default defineConfig({
                   icon: 'CloudServerOutlined',
                   component: './resource/cloud/index',
                 },
-                {
-                  path: '/resource/k8s',
-                  name: 'k8s',
-                  icon: 'RadarChartOutlined',
-                  component: './resource/k8s/index',
-                },
               ],
             },
             {

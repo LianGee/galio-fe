@@ -1,8 +1,9 @@
 import { Button, message, Modal, Table, Tag } from 'antd';
 import React, { Component } from 'react';
 
-import { getTemplateById, getTemplates, saveTemplate, deleteTemplate } from '@/services/templates';
+import { deleteTemplate, getTemplateById, getTemplates, saveTemplate } from '@/services/templates';
 import TemplateForm from '@/pages/project/components/TemplateForm';
+import { TEMPLATE_TYPES } from '@/constants/template';
 
 interface TemplateListProps {
 }
@@ -88,12 +89,15 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
         keyIndex: 'type',
         dataIndex: 'type',
         render: (value: any) => {
-          const types = ['dockerfile', 'nginx', 'k8s'];
-          const colors = ['#2db7f5', '#87d068', '#108ee9'];
           return <Tag
-            color={colors[value]}
-          >{types[value]}</Tag>;
+            color={TEMPLATE_TYPES[value].color}
+          >{TEMPLATE_TYPES[value].name}</Tag>;
         },
+      },
+      {
+        title: '描述',
+        keyIndex: 'description',
+        dataIndex: 'description',
       },
       {
         title: '作者',

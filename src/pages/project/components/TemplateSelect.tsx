@@ -35,6 +35,10 @@ class TemplateSelect extends Component<TemplateSelectProps, TemplateSelectState>
       defaultValue={this.props.value}
       onChange={(value: any) => this.props.onChange(value === undefined ? null : value)}
       allowClear
+      showSearch
+      filterOption={(input: any, option: any) =>
+        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }
     >
       {
         this.state.data.map((template: any) => (

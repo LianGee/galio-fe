@@ -5,6 +5,7 @@ import 'ace-builds/src-noconflict/mode-dockerfile';
 import 'ace-builds/src-noconflict/mode-nginx';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
+import { TEMPLATE_TYPES } from '@/constants/template';
 
 interface TemplateFormProps {
   template: any;
@@ -16,12 +17,14 @@ interface TemplateFormState {
 }
 
 const { Option } = Select;
-const modes = ['dockerfile', 'nginx', 'yaml'];
+
 class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
   constructor(props: any) {
     super(props);
+    const mode = props.template && props.template.type ?
+      TEMPLATE_TYPES[props.template.type].mode : TEMPLATE_TYPES[0].mode;
     this.state = {
-      mode: modes[this.props.template.type] || modes[0],
+      mode,
     };
   }
 
@@ -30,7 +33,7 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
 
   onChange = (value: any) => {
     this.setState({
-      mode: modes[value],
+      mode: TEMPLATE_TYPES[value].mode,
     });
   };
 
@@ -47,10 +50,18 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
       </Form.Item>
       <Form.Item label="类型" name='type' required>
         <Select onChange={this.onChange}>
-          <Option value={0}>dockerfile</Option>
-          <Option value={1}>nginx</Option>
-          <Option value={2}>k8s</Option>
+          {
+            TEMPLATE_TYPES.map((item: any) =>
+              <Option value={item.value} key={item.value}>{item.name}</Option>)
+          }
         </Select>
+      </Form.Item>
+      <Form.Item
+        label="描述"
+        name="description"
+        required
+      >
+        <Input/>
       </Form.Item>
       <Form.Item label="内容" name="content" required>
         <AceEditor

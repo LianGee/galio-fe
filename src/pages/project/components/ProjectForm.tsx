@@ -5,6 +5,7 @@ import DckTypeSelect from '@/pages/project/components/DckTypeSelect';
 import BuildTypeSelect from '@/pages/project/components/BuildTypeSelect';
 import NginxProxy from '@/pages/project/components/NginxProxy';
 import NamespaceSelect from '@/pages/project/components/NamespaceSelect';
+import { TEMPLATE_TYPE } from '@/constants/template';
 
 interface ProjectFormProps {
   initialValues?: any;
@@ -185,7 +186,7 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
                   name="docker_template_id"
                   extra="需要使用docker方式构建的项目"
                 >
-                  <TemplateSelect type={0}/>
+                  <TemplateSelect type={TEMPLATE_TYPE.DOCKERFILE}/>
                 </Form.Item>
                 <Form.Item
                   label="基镜像"
@@ -203,7 +204,7 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
                   name="nginx_template_id"
                   extra="需要使用nginx方式构建的项目"
                 >
-                  <TemplateSelect type={1}/>
+                  <TemplateSelect type={TEMPLATE_TYPE.NGINX}/>
                 </Form.Item>
                 <Form.List
                   name="nginx_proxies"
@@ -222,6 +223,23 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
                 </Form.List>
               </> : null
           }
+          <Divider orientation="left">
+            <span>发布配置</span>
+          </Divider>
+          <Form.Item
+            label="svc模板"
+            name="svc_template_id"
+            rules={[{ required: true, message: '请选择service模板' }]}
+          >
+            <TemplateSelect type={TEMPLATE_TYPE.K8S_SERVICE}/>
+          </Form.Item>
+          <Form.Item
+            label="ingress模板"
+            name="ingress_template_id"
+            rules={[{ required: true, message: '请选择ingress模板' }]}
+          >
+            <TemplateSelect type={TEMPLATE_TYPE.K8S_INGRESS}/>
+          </Form.Item>
         </Form>
       </Drawer>
     );
