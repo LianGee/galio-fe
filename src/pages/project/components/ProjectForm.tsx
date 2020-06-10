@@ -48,7 +48,7 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
     if (this.props !== nextProps) {
       this.setState({
         dockerfileType: nextProps.initialValues.dockerfile_type,
-      })
+      });
     }
   }
 
@@ -226,6 +226,13 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
           <Divider orientation="left">
             <span>发布配置</span>
           </Divider>
+          <Form.Item
+            label="deployment模板"
+            name="deployment_template_id"
+            rules={[{ required: true, message: '请选择deployment模板' }]}
+          >
+            <TemplateSelect type={TEMPLATE_TYPE.K8S_DEPLOYMENT}/>
+          </Form.Item>
           <Form.Item
             label="svc模板"
             name="svc_template_id"

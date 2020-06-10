@@ -83,9 +83,9 @@ export default defineConfig({
               routes: [
                 {
                   path: '/build/create',
-                  name: '开始构建',
+                  name: '构建镜像',
                   icon: 'PlayCircleOutlined',
-                  component: './build/start/index',
+                  component: './build/create/index',
                 },
                 {
                   path: '/build/image',
@@ -107,12 +107,12 @@ export default defineConfig({
               icon: 'RocketOutlined',
               routes: [
                 {
-                  path: '/deploy/start',
-                  name: '开始发布',
-                  icon: 'PlayCircleOutlined',
-                  component: './deploy/index'
-                }
-              ]
+                  path: '/deploy/image',
+                  name: '发布镜像',
+                  icon: 'RadarChartOutlined',
+                  component: './deploy/index',
+                },
+              ],
             },
             {
               path: '/resource',
