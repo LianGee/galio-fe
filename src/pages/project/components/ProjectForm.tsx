@@ -243,7 +243,6 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
           <Form.Item
             label="ingress模板"
             name="ingress_template_id"
-            rules={[{ required: true, message: '请选择ingress模板' }]}
           >
             <TemplateSelect type={TEMPLATE_TYPE.K8S_INGRESS}/>
           </Form.Item>
