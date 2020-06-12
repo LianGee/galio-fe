@@ -1,41 +1,21 @@
 import React, { Component } from 'react';
-import { Button, Modal, Table, Tag } from 'antd';
-import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-sh';
-import 'ace-builds/src-noconflict/theme-github';
+import { Button, Table, Tag } from 'antd';
 
 interface PodListProps {
   pods: any;
 }
 
 interface PodListState {
-  visible: boolean;
-  pod: any;
-  log: any;
-  interval: any;
 }
-
 
 class PodList extends Component<PodListProps, PodListState> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      visible: false,
-      pod: {},
-      log: '',
-      interval: undefined,
-    };
+    this.state = {};
   }
 
   componentDidMount(): void {
   }
-
-  readLog = (record: any) => {
-    console.log(record);
-  };
-
-  readPreviousLog = () => {
-  };
 
   render() {
     const columns = [
@@ -71,7 +51,10 @@ class PodList extends Component<PodListProps, PodListState> {
           <Button
             size="small"
             style={{ marginLeft: 5 }}
-            onClick={() => this.readLog(record)}
+            onClick={() => {
+              const redirect = `/log?name=${record.name}&namespace=${record.namespace}`;
+              window.open(redirect);
+            }}
           >日志</Button>
         </div>,
       },
@@ -84,37 +67,6 @@ class PodList extends Component<PodListProps, PodListState> {
         size="large"
         bordered
       />
-      <Modal
-        visible={this.state.visible}
-        title={this.state.pod.name}
-        width={1200}
-        centered
-        destroyOnClose
-        onCancel={() => {
-          const { interval } = this.state;
-          clearInterval(interval);
-          this.setState({
-            visible: false,
-            log: '',
-            pod: {},
-          });
-        }}
-        footer={<div>
-          <Button onClick={this.readPreviousLog}>
-            查看上一份退出日志
-          </Button>
-        </div>}
-      >
-        <AceEditor
-          mode="sh"
-          theme="github"
-          name="log"
-          value={this.state.log}
-          readOnly
-          style={{ width: '100%', minHeight: 600 }}
-        />
-        <div id="log"/>
-      </Modal>
     </div>;
   }
 }

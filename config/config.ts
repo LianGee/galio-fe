@@ -44,6 +44,17 @@ export default defineConfig({
       ],
     },
     {
+      path: '/log',
+      component: '../layouts/BlankLayout',
+      routes: [
+        {
+          name: 'log',
+          path: '/log',
+          component: './log/index',
+        },
+      ],
+    },
+    {
       path: '/',
       component: '../layouts/SecurityLayout',
       routes: [

@@ -4,15 +4,15 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout, {
-  MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
-  Settings,
   DefaultFooter,
+  MenuDataItem,
+  Settings,
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
-import { Link, useIntl, connect, Dispatch } from 'umi';
+import { connect, Dispatch, Link, useIntl } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Button, Result } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
@@ -31,6 +31,7 @@ const noMatch = (
     }
   />
 );
+
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -41,6 +42,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
+
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -68,7 +70,7 @@ const defaultFooterDom = (
       },
       {
         key: 'github',
-        title: <GithubOutlined />,
+        title: <GithubOutlined/>,
         href: 'https://github.com/ant-design/ant-design-pro',
         blankTarget: true,
       },
@@ -155,7 +157,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       }}
       footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
-      rightContentRender={() => <RightContent />}
+      rightContentRender={() => <RightContent/>}
       {...props}
       {...settings}
     >

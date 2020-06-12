@@ -24,6 +24,7 @@ export const get_pods_info = (pods: any) => {
     pods_info.push({
       uid: pod.metadata.uid,
       name: pod.metadata.name,
+      namespace: pod.metadata.namespace,
       podIp: pod.status.podIP,
       hostIP: pod.status.hostIP,
       startTime: pod.status.startTime,
