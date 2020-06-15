@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/theme-monokai';
 import io from 'socket.io-client';
 import { getPageQuery } from '@/utils/utils';
 import { Button, Col, Input, InputNumber, Layout, Row, Switch } from 'antd';
-import styles from './index.less';
 import {
   CaretDownOutlined,
   CaretUpOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from '@ant-design/icons/lib';
+import styles from './index.less';
 
 interface LogProps {
 
@@ -24,6 +24,7 @@ interface LogState {
   theme: 'monokai' | 'github';
   fontSize: number;
   tail_lines: number;
+  trace: boolean;
 }
 
 const socket = io('http://127.0.0.1:8010/galio/deploy');
@@ -35,6 +36,8 @@ const { Search } = Input;
 class Log extends Component<LogProps, LogState> {
   editor: any;
 
+  interval: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -42,23 +45,41 @@ class Log extends Component<LogProps, LogState> {
       pod: getPageQuery(),
       theme: 'github',
       fontSize: 12,
-      tail_lines: 500,
+      tail_lines: 10,
+      trace: true,
     };
   }
 
   componentDidMount(): void {
-    const { pod } = this.state;
-    socket.connect();
-    socket.emit('log', { ...pod });
-    socket.on('log', (data: any) => {
-      this.setState({ log: data });
-      this.scrollToBottom();
-    });
+    this.init();
   }
 
   componentWillUnmount(): void {
     socket.close();
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
+
+  init = () => {
+    let logs: any = [];
+    this.setState({ log: undefined });
+    clearInterval(this.interval);
+    const { pod, tail_lines, trace } = this.state;
+    socket.connect();
+    socket.emit('log', { ...pod, tail_lines, trace });
+    socket.on('log', (data: any) => {
+      logs.push(data);
+      this.scrollToBottom();
+    });
+    this.interval = setInterval(() => {
+      if (logs.length > tail_lines) {
+        logs = logs.slice(logs.length - tail_lines, logs.length + 1);
+      }
+      this.setState({ log: logs.join('\n') });
+    }, 1000);
+  };
+
 
   scrollToBottom = () => {
     const session = this.editor.editor.getSession();
@@ -143,7 +164,7 @@ class Log extends Component<LogProps, LogState> {
           ref={(ref: any) => {
             this.editor = ref;
           }}
-          mode="html"
+          mode="text"
           theme={this.state.theme}
           name="log"
           value={this.state.log}
@@ -151,6 +172,8 @@ class Log extends Component<LogProps, LogState> {
           style={{ width: '100%', height: '100%' }}
           setOptions={{
             autoScrollEditorIntoView: true,
+            wrap: true,
+            showPrintMargin: false,
           }}
           fontSize={this.state.fontSize}
         />
@@ -161,9 +184,12 @@ class Log extends Component<LogProps, LogState> {
         <InputNumber
           value={this.state.tail_lines}
           onChange={(value: any) => this.setState({ tail_lines: value })}
+          onBlur={() => {
+            this.init();
+          }}
           step={500}
           max={500000}
-          min={500}
+          min={this.state.tail_lines}
           style={{ marginLeft: 10 }}
         />
         <Switch
