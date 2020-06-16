@@ -45,7 +45,7 @@ class Log extends Component<LogProps, LogState> {
       pod: getPageQuery(),
       theme: 'github',
       fontSize: 12,
-      tail_lines: 10,
+      tail_lines: 100,
       trace: true,
     };
   }
@@ -70,22 +70,14 @@ class Log extends Component<LogProps, LogState> {
     socket.emit('log', { ...pod, tail_lines, trace });
     socket.on('log', (data: any) => {
       logs.push(data);
-      this.scrollToBottom();
-    });
-    this.interval = setInterval(() => {
       if (logs.length > tail_lines) {
         logs = logs.slice(logs.length - tail_lines, logs.length + 1);
       }
+      setTimeout(() => this.editor.editor.gotoLine(logs.length), 1000);
+    });
+    this.interval = setInterval(() => {
       this.setState({ log: logs.join('\n') });
-    }, 1000);
-  };
-
-
-  scrollToBottom = () => {
-    const session = this.editor.editor.getSession();
-    this.editor.editor.gotoLine(
-      session.getLength(),
-    );
+    }, 400);
   };
 
   render() {
@@ -150,7 +142,9 @@ class Log extends Component<LogProps, LogState> {
                 <VerticalAlignBottomOutlined
                   style={{ marginLeft: 8 }}
                   onClick={() => {
-                    this.scrollToBottom();
+                    this.editor.editor.gotoLine(
+                      this.state.tail_lines,
+                    );
                     this.editor.editor.findPrevious();
                   }}
                 />
