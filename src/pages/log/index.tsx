@@ -5,7 +5,7 @@ import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/theme-monokai';
 import io from 'socket.io-client';
 import { getPageQuery } from '@/utils/utils';
-import { Button, Col, Input, InputNumber, Layout, Row, Switch } from 'antd';
+import { Button, Col, Input, InputNumber, Layout, Row, Select, Switch } from 'antd';
 import {
   CaretDownOutlined,
   CaretUpOutlined,
@@ -19,7 +19,7 @@ interface LogProps {
 }
 
 interface LogState {
-  log: any;
+  logs: any;
   pod: any;
   theme: 'monokai' | 'github';
   fontSize: number;
@@ -28,10 +28,9 @@ interface LogState {
 }
 
 const socket = io('http://127.0.0.1:8010/galio/deploy');
-
 const { Header, Footer, Content } = Layout;
-
 const { Search } = Input;
+const { Option } = Select;
 
 class Log extends Component<LogProps, LogState> {
   editor: any;
@@ -41,7 +40,7 @@ class Log extends Component<LogProps, LogState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      log: '',
+      logs: [],
       pod: getPageQuery(),
       theme: 'github',
       fontSize: 12,
@@ -51,33 +50,58 @@ class Log extends Component<LogProps, LogState> {
   }
 
   componentDidMount(): void {
+    socket.connect();
     this.init();
   }
 
   componentWillUnmount(): void {
+    socket.disconnect();
     socket.close();
     if (this.interval) {
       clearInterval(this.interval);
     }
   }
 
+  onTrace = (checked: boolean) => {
+    this.setState({ trace: checked });
+  };
+
+  onSelectTailLine = () => {
+    setTimeout(() => {
+      const { pod, tail_lines, trace } = this.state;
+      socket.emit('log', { ...pod, tail_lines, trace });
+      this.editor.editor.gotoLine(this.state.logs.length);
+    }, 1000);
+  };
+
   init = () => {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     let logs: any = [];
-    this.setState({ log: undefined });
-    clearInterval(this.interval);
     const { pod, tail_lines, trace } = this.state;
-    socket.connect();
     socket.emit('log', { ...pod, tail_lines, trace });
     socket.on('log', (data: any) => {
-      logs.push(data);
-      if (logs.length > tail_lines) {
-        logs = logs.slice(logs.length - tail_lines, logs.length + 1);
+      if (logs.length > 10000) {
+        logs = logs.slice(logs.length - 10000, logs.length + 1)
       }
-      setTimeout(() => this.editor.editor.gotoLine(logs.length), 1000);
+      logs.push(data);
+      this.editor.editor.gotoLine(this.state.logs.length);
     });
     this.interval = setInterval(() => {
-      this.setState({ log: logs.join('\n') });
-    }, 400);
+      if (this.state.trace) {
+        const maxLen = this.state.tail_lines;
+        if (logs.length > maxLen) {
+          this.setState({
+            logs: logs.slice(logs.length - maxLen, logs.length + 1),
+          });
+        } else {
+          this.setState({
+            logs,
+          });
+        }
+      }
+    }, 200);
   };
 
   render() {
@@ -161,7 +185,7 @@ class Log extends Component<LogProps, LogState> {
           mode="text"
           theme={this.state.theme}
           name="log"
-          value={this.state.log}
+          value={this.state.logs.join('\n')}
           readOnly
           style={{ width: '100%', height: '100%' }}
           setOptions={{
@@ -175,22 +199,23 @@ class Log extends Component<LogProps, LogState> {
       </Content>
       <Footer className={styles.footer}>
         行数
-        <InputNumber
+        <Select
+          style={{ marginLeft: 10, minWidth: 100 }}
           value={this.state.tail_lines}
           onChange={(value: any) => this.setState({ tail_lines: value })}
-          onBlur={() => {
-            this.init();
-          }}
-          step={500}
-          max={500000}
-          min={this.state.tail_lines}
-          style={{ marginLeft: 10 }}
-        />
+          onSelect={this.onSelectTailLine}
+        >
+          <Option value={100}>100</Option>
+          <Option value={500}>500</Option>
+          <Option value={1000}>1000</Option>
+          <Option value={10000}>10000</Option>
+        </Select>
         <Switch
           style={{ marginLeft: 10 }}
           checkedChildren="开启追踪"
           unCheckedChildren="关闭追踪"
-          defaultChecked
+          checked={this.state.trace}
+          onChange={this.onTrace}
         />
       </Footer>
     </Layout>;
