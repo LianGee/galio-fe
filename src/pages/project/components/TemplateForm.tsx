@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Select } from 'antd';
-import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-dockerfile';
-import 'ace-builds/src-noconflict/mode-nginx';
-import 'ace-builds/src-noconflict/mode-yaml';
-import 'ace-builds/src-noconflict/theme-monokai';
 import { TEMPLATE_TYPES } from '@/constants/template';
+import TemplateEditor from '@/pages/project/components/TemplateEditor';
 
 interface TemplateFormProps {
   template: any;
@@ -64,12 +60,7 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
         <Input/>
       </Form.Item>
       <Form.Item label="内容" name="content" required>
-        <AceEditor
-          mode={this.state.mode}
-          theme="monokai"
-          name="editor"
-          style={{ width: '100%' }}
-        />
+        <TemplateEditor mode={this.state.mode}/>
       </Form.Item>
     </Form>;
   }

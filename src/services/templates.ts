@@ -24,3 +24,10 @@ export async function deleteTemplate(id: any) {
     method: 'delete',
   });
 }
+
+export async function preview(params: any) {
+  return request('/api/template/preview', {
+    method: 'post',
+    data: params,
+  });
+}

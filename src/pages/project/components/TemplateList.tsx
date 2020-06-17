@@ -153,7 +153,6 @@ class TemplateList extends Component<TemplateListProps, TemplateListState> {
         }}
       >
         <TemplateForm form={this.form} template={this.state.template}/>
-        <div id="editor"/>
       </Modal>
     </>;
   }

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import TemplateList from '@/pages/project/components/TemplateList';
 
