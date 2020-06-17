@@ -110,7 +110,8 @@ class Log extends Component<LogProps, LogState> {
   };
 
   downLoad = () => {
-
+    const { name, namespace } = this.state.pod;
+    window.open(`/api/deploy/download/log?name=${name}&namespace=${namespace}&tail_lines=${100000}`);
   };
 
   render() {
