@@ -70,7 +70,6 @@ class Log extends Component<LogProps, LogState> {
     setTimeout(() => {
       const { pod, tail_lines, trace } = this.state;
       socket.emit('log', { ...pod, tail_lines, trace });
-      this.editor.editor.gotoLine(this.state.logs.length);
     }, 1000);
   };
 
@@ -83,10 +82,12 @@ class Log extends Component<LogProps, LogState> {
     socket.emit('log', { ...pod, tail_lines, trace });
     socket.on('log', (data: any) => {
       if (logs.length > 10000) {
-        logs = logs.slice(logs.length - 10000, logs.length + 1)
+        logs = logs.slice(logs.length - 10000, logs.length + 1);
       }
       logs.push(data);
-      this.editor.editor.gotoLine(this.state.logs.length);
+      setTimeout(() => {
+        this.editor.editor.gotoLine(this.state.logs.length);
+      }, 400);
     });
     this.interval = setInterval(() => {
       if (this.state.trace) {
@@ -102,6 +103,14 @@ class Log extends Component<LogProps, LogState> {
         }
       }
     }, 200);
+  };
+
+  prevLog = () => {
+    window.location.href = `${window.location}&previous=true`;
+  };
+
+  downLoad = () => {
+
   };
 
   render() {
@@ -217,6 +226,17 @@ class Log extends Component<LogProps, LogState> {
           checked={this.state.trace}
           onChange={this.onTrace}
         />
+        <span style={{ marginLeft: 10 }}>
+          控制台最多显示12h前最近1w行日志，查看更多日志请下载到本地
+        </span>
+        <Button
+          style={{ float: 'right', marginLeft: 10, marginTop: 10 }}
+          onClick={this.downLoad}
+        >下载日志</Button>
+        <Button
+          style={{ float: 'right', marginTop: 10 }}
+          onClick={this.prevLog}
+        >查看上一次退出日志</Button>
       </Footer>
     </Layout>;
   }
