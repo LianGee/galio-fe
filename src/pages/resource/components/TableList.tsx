@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Collapse, List, Popover } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons/lib';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 const { Panel } = Collapse;
 

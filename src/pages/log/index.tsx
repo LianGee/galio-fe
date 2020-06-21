@@ -11,7 +11,7 @@ import {
   CaretUpOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
-} from '@ant-design/icons/lib';
+} from '@ant-design/icons';
 import styles from './index.less';
 
 interface LogProps {

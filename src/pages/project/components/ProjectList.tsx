@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar, Card, Descriptions, List, message, Typography } from 'antd';
-import { CiCircleOutlined, DeleteOutlined, FormOutlined, HomeOutlined, RocketOutlined } from '@ant-design/icons/lib';
+import { CiCircleOutlined, DeleteOutlined, FormOutlined, HomeOutlined, RocketOutlined } from '@ant-design/icons';
 import ProjectForm from '@/pages/project/components/ProjectForm';
 import { list, save } from '@/services/project';
 

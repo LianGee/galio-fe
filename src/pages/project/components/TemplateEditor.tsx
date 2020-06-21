@@ -4,7 +4,7 @@ import 'ace-builds/src-noconflict/mode-dockerfile';
 import 'ace-builds/src-noconflict/mode-nginx';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-monokai';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Col, Row } from 'antd';
 import { preview } from '@/services/templates';
 import ProjectSelect from '@/pages/build/components/ProjectSelect';
