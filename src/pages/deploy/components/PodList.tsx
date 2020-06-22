@@ -64,7 +64,7 @@ class PodList extends Component<PodListProps, PodListState> {
         rowKey="name"
         columns={columns}
         dataSource={this.props.pods}
-        size="large"
+        size="small"
         bordered
       />
     </div>;

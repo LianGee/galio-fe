@@ -4,11 +4,11 @@ import ProjectSelect from '@/pages/build/components/ProjectSelect';
 import ImageSelect from '@/pages/deploy/components/ImageSelect';
 
 const layout = {
-  labelCol: { span: 2 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 5 },
+  wrapperCol: { span: 19 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 2, span: 16 },
+  wrapperCol: { offset: 19, span: 5 },
 };
 
 interface DeployFormProps {
@@ -73,7 +73,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
       >
         <ImageSelect project_id={this.state.projectId}/>
       </Form.Item>
-      <Form.Item {...tailLayout}>
+      <Form.Item {...tailLayout} style={{ textAlign: 'right' }}>
         <Button
           type="primary"
           htmlType="submit"
