@@ -114,7 +114,7 @@ class Deploy extends Component<DeployProps, DeployState> {
               loading={this.state.loading}
               deploy={this.deploy}
               initialValues={{
-                project_id: Number(project_id),
+                project_id: project_id ? Number(project_id) : undefined,
               }}
             />
           </Col>
