@@ -10,6 +10,7 @@ import { SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
 import DeployStatus from '@/pages/deploy/components/DeployStatus';
+import { getPageQuery } from '@/utils/utils';
 
 interface DeployProps {
 
@@ -39,6 +40,10 @@ class Deploy extends Component<DeployProps, DeployState> {
 
   componentDidMount(): void {
     socket.connect();
+    const { project_id } = getPageQuery();
+    if (project_id) {
+      this.selectProject(project_id);
+    }
   }
 
   componentWillUnmount(): void {
@@ -90,6 +95,7 @@ class Deploy extends Component<DeployProps, DeployState> {
   };
 
   render() {
+    const { project_id } = getPageQuery();
     return <PageHeaderWrapper>
       <Card>
         <Row
@@ -107,7 +113,9 @@ class Deploy extends Component<DeployProps, DeployState> {
               selectProject={this.selectProject}
               loading={this.state.loading}
               deploy={this.deploy}
-              defaultValues={{}}
+              initialValues={{
+                project_id: Number(project_id),
+              }}
             />
           </Col>
         </Row>

@@ -25,7 +25,14 @@ class ImageSelect extends Component<ImageSelectProps, ImageSelectState> {
     };
   }
 
+  componentDidMount(): void {
+    if (this.props.project_id) {
+      this.init(this.props.project_id);
+    }
+  }
+
   componentWillReceiveProps(nextProps: any): void {
+    console.log(nextProps);
     if (this.props.project_id !== nextProps.project_id) {
       this.init(nextProps.project_id);
     }

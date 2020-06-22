@@ -15,11 +15,11 @@ interface DeployFormProps {
   selectProject: any;
   deploy: any;
   loading: boolean;
-  defaultValues: {};
+  initialValues: {};
 }
 
 interface DeployFormState {
-  projectId: any
+  project_id: any
 }
 
 class DeployForm extends Component<DeployFormProps, DeployFormState> {
@@ -28,7 +28,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      projectId: undefined,
+      project_id: props.initialValues.project_id,
     };
   }
 
@@ -46,7 +46,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
     const { project_id } = changedValue;
     if (project_id !== undefined) {
       this.setState({
-        projectId: project_id,
+        project_id,
       });
     }
   };
@@ -57,7 +57,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
       onFinish={this.onFinish}
       onValuesChange={this.onValueChange}
       ref={this.form}
-      initialValues={this.props.defaultValues}
+      initialValues={this.props.initialValues}
     >
       <Form.Item
         label="项目"
@@ -71,7 +71,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
         name="image_name"
         rules={[{ required: true, message: '请选择镜像' }]}
       >
-        <ImageSelect project_id={this.state.projectId}/>
+        <ImageSelect project_id={this.state.project_id}/>
       </Form.Item>
       <Form.Item {...tailLayout} style={{ textAlign: 'right' }}>
         <Button
