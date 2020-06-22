@@ -19,7 +19,7 @@ class Template extends Component<TemplateProps, TemplateState> {
   }
 
   render() {
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
       <TemplateList/>
     </PageHeaderWrapper>;
   }

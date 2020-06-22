@@ -80,7 +80,8 @@ class Deploy extends Component<DeployProps, DeployState> {
   };
 
   render() {
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
+
       <DeployForm
         selectProject={this.selectProject}
         loading={this.state.loading}

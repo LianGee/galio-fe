@@ -83,7 +83,7 @@ class DBInstance extends Component<DBInstanceProps, DBInstanceState> {
         >删除</Button>,
       },
     ];
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
       <Button
         type="primary"
         style={{ marginBottom: 20, float: 'right', zIndex: 10 }}

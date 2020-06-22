@@ -80,7 +80,7 @@ class Query extends Component<QueryProps, QueryState> {
   };
 
   render() {
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
       <Row style={{ backgroundColor: 'white' }}>
         <Col span={8} style={{ padding: 20 }}>
           <SelectDBForm getTableList={this.getTableList} form={this.form}/>

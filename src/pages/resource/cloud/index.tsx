@@ -22,7 +22,7 @@ class Cloud extends Component<CloudProps, CloudState> {
   }
 
   render() {
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
       <HostManager/>
       <DomainManager/>
     </PageHeaderWrapper>;

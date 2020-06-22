@@ -5,7 +5,7 @@ import ProjectList from '@/pages/project/components/ProjectList';
 
 class Project extends Component {
   render() {
-    return <PageHeaderWrapper title={false}>
+    return <PageHeaderWrapper>
       <ProjectList/>
     </PageHeaderWrapper>
   }
