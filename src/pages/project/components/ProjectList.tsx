@@ -100,12 +100,12 @@ class ProjectList extends Component<ProjectListProps, ProjectListState> {
                     <FormOutlined onClick={() => this.editProject(item)}/>,
                     <CiCircleOutlined
                       onClick={() => {
-                        window.open(`/build/create?project_id=${item.id}`);
+                        window.location.href = `/build/create?project_id=${item.id}`;
                       }}
                     />,
                     <RocketOutlined
                       onClick={() => {
-                        window.open(`/deploy/image?project_id=${item.id}`);
+                        window.location.href = `/deploy/image?project_id=${item.id}`;
                       }}
                     />,
                     <HomeOutlined onClick={() => {

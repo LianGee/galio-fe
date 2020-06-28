@@ -6,7 +6,7 @@ import PodList from '@/pages/deploy/components/PodList';
 import { deploy } from '@/services/deploy';
 import { Avatar, Badge, Card, Col, Result, Row } from 'antd';
 import { queryProjectById } from '@/services/project';
-import { SmileOutlined, TagOutlined } from '@ant-design/icons';
+import { SelectOutlined, SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
 import DeployStatus from '@/pages/deploy/components/DeployStatus';
@@ -125,6 +125,10 @@ class Deploy extends Component<DeployProps, DeployState> {
               title={<>
                 <Avatar src={this.state.currentProject.logo}/>
                 <strong style={{ marginLeft: 10 }}>{this.state.currentProject.name}</strong>
+                <SelectOutlined
+                  style={{ marginLeft: 10, color: '#1890ff' }}
+                  onClick={() => window.open(`http://${this.state.currentProject.domain}`)}
+                />
               </>}
               extra={<div>
               <span style={{ marginRight: 8 }}>
