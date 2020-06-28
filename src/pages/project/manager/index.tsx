@@ -66,6 +66,10 @@ class Project extends Component<ProjectProps, ProjectState> {
     save(values).then(response => {
       if (response.status === 0) {
         message.success('保存成功');
+        this.setState({
+          visible: false,
+        });
+        this.init();
       } else {
         message.error(response.msg);
       }
