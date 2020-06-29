@@ -24,7 +24,6 @@ const { Search } = Input;
 const initialValues = {
   namespace: 'default',
   type: 0,
-  base_image: 'nginx',
   dockerfile_type: 1,
   nginx_proxies: [
     { rule: '^api', server: '' },

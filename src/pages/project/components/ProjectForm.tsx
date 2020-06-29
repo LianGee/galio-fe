@@ -6,6 +6,7 @@ import BuildTypeSelect from '@/pages/project/components/BuildTypeSelect';
 import NginxProxy from '@/pages/project/components/NginxProxy';
 import NamespaceSelect from '@/pages/project/components/NamespaceSelect';
 import { TEMPLATE_TYPE } from '@/constants/template';
+import BaseImageSelect from '@/pages/project/components/BaseImageSelect';
 
 interface ProjectFormProps {
   initialValues?: any;
@@ -193,11 +194,7 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
                   name="base_image"
                   extra="前端项目仅支持nginx部署"
                 >
-                  <Select>
-                    <Option value='nginx'>nginx</Option>
-                    <Option
-                      value='harbor.bchen.xyz/library/python-36-centos7:latest'>harbor.bchen.xyz/library/python-36-centos7:latest</Option>
-                  </Select>
+                  <BaseImageSelect/>
                 </Form.Item>
                 <Form.Item
                   label="nginx 模板"
