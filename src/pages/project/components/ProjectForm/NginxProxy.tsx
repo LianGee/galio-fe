@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import ProxyInput from '@/pages/project/components/ProxyInput';
+import ProxyInput from '@/pages/project/components/ProjectForm/ProxyInput';
 
 interface NginxProxyProps {
   value?: any;
