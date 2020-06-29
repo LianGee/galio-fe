@@ -1,7 +1,7 @@
 import { Select } from 'antd';
 import * as React from 'react';
 import { Component } from 'react';
-import { listProjectImage } from '@/services/docker';
+import { listProjectImage } from '@/services/harbor';
 
 const { Option } = Select;
 
@@ -32,7 +32,6 @@ class ImageSelect extends Component<ImageSelectProps, ImageSelectState> {
   }
 
   componentWillReceiveProps(nextProps: any): void {
-    console.log(nextProps);
     if (this.props.project_id !== nextProps.project_id) {
       this.init(nextProps.project_id);
     }
@@ -58,7 +57,7 @@ class ImageSelect extends Component<ImageSelectProps, ImageSelectState> {
     >
       {
         this.state.images.map((image: any) => (
-          <Option key={image.id} value={image.name}>{image.name}</Option>
+          <Option key={image.digest} value={image.name}>{image.name}</Option>
         ))
       }
     </Select>;

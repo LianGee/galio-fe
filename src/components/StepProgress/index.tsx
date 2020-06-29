@@ -16,8 +16,7 @@ const { Step } = Steps;
 class StepProgress extends Component<StepProgressProps, StepProgressState> {
   constructor(props: any) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   renderDescription = (index: number) => {
@@ -31,7 +30,7 @@ class StepProgress extends Component<StepProgressProps, StepProgressState> {
     const step = progress.filter((item: any) => item.current === index).pop();
     const type = step ? step.type : 'wait';
     const description = step ? step.description : '等待开始';
-    return <Row>
+    return <Row style={{ wordBreak: 'break-all' }}>
       <Col span={2}>
         {iconMap[type]}
       </Col>
@@ -50,11 +49,10 @@ class StepProgress extends Component<StepProgressProps, StepProgressState> {
           percent={progress.length > 0 ? progress.lastItem.percent : 0}
         />
       </Col>
-      <Col span={14}>
+      <Col span={14} style={{ overflow: 'auto' }}>
         <Steps
           direction="vertical"
           current={progress.length > 0 ? progress.lastItem.current : 0}
-          style={{ marginLeft: 20 }}
           size="small"
           status={progress.length > 0 ? progress.lastItem.type : 0}
         >

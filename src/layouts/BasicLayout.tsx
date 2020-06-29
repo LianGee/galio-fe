@@ -18,6 +18,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+import { WalletOutlined } from '@ant-design/icons/lib';
 
 const noMatch = (
   <Result
@@ -60,24 +61,18 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
+    copyright="2020 bchen.xyz All Rights Reserved. 鄂ICP备20002402号-1"
     links={[
       {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
+        key: 'blog',
+        title: <WalletOutlined/>,
+        href: 'https://blog.bchen.xyz',
         blankTarget: true,
       },
       {
         key: 'github',
         title: <GithubOutlined/>,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
+        href: 'https://github.com/LianGee',
         blankTarget: true,
       },
     ]}

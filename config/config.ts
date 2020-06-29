@@ -99,12 +99,6 @@ export default defineConfig({
                   component: './build/create/index',
                 },
                 {
-                  path: '/build/image',
-                  name: '镜像中心',
-                  icon: 'CloudUploadOutlined',
-                  component: './build/image/index',
-                },
-                {
                   path: '/build/log',
                   name: '构建日志',
                   icon: 'PieChartOutlined',
