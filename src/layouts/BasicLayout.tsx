@@ -11,14 +11,13 @@ import ProLayout, {
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import { connect, Dispatch, Link, useIntl } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
+import { GithubOutlined, WalletOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-import { WalletOutlined } from '@ant-design/icons/lib';
 
 const noMatch = (
   <Result
