@@ -14,6 +14,7 @@ interface ProjectProps {
 
 interface ProjectState {
   data: any;
+  dataSource: any;
   loading: boolean;
   visible: boolean;
   initialValues: {};
@@ -29,6 +30,7 @@ const initialValues = {
     { rule: '^api', server: '' },
   ],
   service_type: 0,
+  harbor_project: 'library',
 };
 
 class Project extends Component<ProjectProps, ProjectState> {
@@ -36,6 +38,7 @@ class Project extends Component<ProjectProps, ProjectState> {
     super(props);
     this.state = {
       data: [],
+      dataSource: [],
       loading: false,
       visible: false,
       initialValues,
@@ -52,6 +55,7 @@ class Project extends Component<ProjectProps, ProjectState> {
     list().then(response => {
       if (response.status === 0) {
         this.setState({
+          dataSource: response.data,
           data: response.data,
           loading: false,
         });
@@ -89,10 +93,16 @@ class Project extends Component<ProjectProps, ProjectState> {
 
   onSearch = (value: string) => {
     const { data } = this.state;
-    const d = data.filter((item: any) => item.name.indexOf(value) >= 0);
-    this.setState({
-      data: d,
-    });
+    if (value && value.length > 0) {
+      const d = data.filter((item: any) => item.name.indexOf(value) >= 0);
+      this.setState({
+        dataSource: d,
+      });
+    } else {
+      this.setState({
+        dataSource: data,
+      });
+    }
   };
 
   render() {
@@ -113,7 +123,7 @@ class Project extends Component<ProjectProps, ProjectState> {
         </Col>
       </Row>
       <ProjectList
-        data={this.state.data}
+        data={this.state.dataSource}
         loading={this.state.loading}
         editProject={this.editProject}
       />

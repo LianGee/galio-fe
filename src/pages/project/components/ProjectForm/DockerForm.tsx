@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form } from 'antd';
+import { Form, Input } from 'antd';
 import DckTypeSelect from '@/pages/project/components/ProjectForm/DckTypeSelect';
 import TemplateSelect from '@/pages/project/components/ProjectForm/TemplateSelect';
 import { TEMPLATE_TYPE } from '@/constants/template';
@@ -91,6 +91,13 @@ class DockerForm extends Component<DockerFormProps, DockerFormState> {
             </Form.List>
           </> : null
       }
+      <Form.Item
+        label="Harbor仓库项目名"
+        name="harbor_project"
+        rules={[{ required: true, message: '请填写仓库名' }]}
+      >
+        <Input/>
+      </Form.Item>
     </Form>;
   }
 }

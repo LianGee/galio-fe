@@ -120,19 +120,6 @@ export default defineConfig({
               ],
             },
             {
-              path: '/resource',
-              name: '资源',
-              icon: 'CloudOutlined',
-              routes: [
-                {
-                  path: '/resource/cloud',
-                  name: '云主机',
-                  icon: 'CloudServerOutlined',
-                  component: './resource/cloud/index',
-                },
-              ],
-            },
-            {
               path: '/database/',
               name: '数据库',
               icon: 'DatabaseOutlined',
