@@ -9,7 +9,6 @@ interface QueryResultProps {
 interface QueryResultState {
   data: any;
   columns: any;
-  total: any;
 }
 
 class QueryResult extends Component<QueryResultProps, QueryResultState> {
@@ -18,7 +17,6 @@ class QueryResult extends Component<QueryResultProps, QueryResultState> {
     this.state = {
       data: [],
       columns: [],
-      total: 0,
     };
   }
 
@@ -41,7 +39,6 @@ class QueryResult extends Component<QueryResultProps, QueryResultState> {
       this.setState({
         columns,
         data: result.result,
-        total: result.total,
       });
     }
   }
