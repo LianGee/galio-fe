@@ -5,7 +5,6 @@ import DeployForm from '@/pages/deploy/components/DeployForm';
 import PodList from '@/pages/deploy/components/PodList';
 import { deploy } from '@/services/deploy';
 import { Avatar, Badge, Card, Col, Result, Row } from 'antd';
-import { queryProjectById } from '@/services/project';
 import { SelectOutlined, SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
@@ -50,13 +49,11 @@ class Deploy extends Component<DeployProps, DeployState> {
     socket.close();
   }
 
-  selectProject = (value: any) => {
-    queryProjectById(value).then(response => {
-      this.setState({
-        currentProject: response.data,
-      });
+  selectProject = (project: any) => {
+    this.setState({
+      currentProject: project,
     });
-    this.updateStatus(value);
+    this.updateStatus(project.id);
   };
 
   updateStatus = (project_id: any) => {

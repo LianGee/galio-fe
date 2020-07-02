@@ -8,7 +8,7 @@ interface PairInputProps {
   useNum: boolean;
   firstPlaceholder: string;
   secondPlaceHolder: string;
-  names: [];
+  names: any;
 }
 
 interface PairInputState {
@@ -34,6 +34,11 @@ class PairInput extends Component<PairInputProps, PairInputState> {
     this.setState({
       first: data,
     });
+    const { names } = this.props;
+    const map = {};
+    map[names[0]] = data;
+    map[names[1]] = this.state.second;
+    this.props.onChange({ ...map });
   };
 
   onSecondChange = (value: any) => {
@@ -41,6 +46,11 @@ class PairInput extends Component<PairInputProps, PairInputState> {
     this.setState({
       second: data,
     });
+    const { names } = this.props;
+    const map = {};
+    map[names[0]] = this.state.first;
+    map[names[1]] = data;
+    this.props.onChange({ ...map });
   };
 
   render() {
@@ -49,13 +59,13 @@ class PairInput extends Component<PairInputProps, PairInputState> {
         this.props.useNum ?
           <InputNumber
             placeholder={this.props.firstPlaceholder}
-            value={this.state.first}
+            value={this.props.value ? this.props.value[this.props.names[0]] : undefined}
             onChange={this.onFirstChange}
             style={{ width: '45%' }}
           /> :
           <Input
             placeholder={this.props.firstPlaceholder}
-            value={this.state.first}
+            value={this.props.value ? this.props.value[this.props.names[0]] : undefined}
             onChange={this.onFirstChange}
             style={{ width: '45%' }}
           />
@@ -67,13 +77,13 @@ class PairInput extends Component<PairInputProps, PairInputState> {
         this.props.useNum ?
           <InputNumber
             placeholder={this.props.secondPlaceHolder}
-            value={this.state.second}
+            value={this.props.value ? this.props.value[this.props.names[1]] : undefined}
             onChange={this.onSecondChange}
             style={{ width: '45%' }}
           /> :
           <Input
             placeholder={this.props.secondPlaceHolder}
-            value={this.state.second}
+            value={this.props.value ? this.props.value[this.props.names[1]] : undefined}
             onChange={this.onSecondChange}
             style={{ width: '45%' }}
           />

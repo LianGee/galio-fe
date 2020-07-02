@@ -3,33 +3,27 @@ import { Button, Drawer, Form, message } from 'antd';
 import ProjectSelect from '@/pages/build/components/ProjectSelect';
 import ImageSelect from '@/pages/deploy/components/ImageSelect';
 import { SettingOutlined } from '@ant-design/icons/lib';
-import { FormList } from '@/pages/deploy/components/FormList';
-import { PairFormList } from '@/pages/deploy/components/PairFormList';
-import PairInput from '@/pages/deploy/components/PairInput';
+import DeployConfigFrom from '@/pages/deploy/components/DeployConfigFrom';
+import { queryProjectById } from '@/services/project';
 
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 20, span: 4 },
-};
-
-const layoutWithoutLabel = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 20, offset: 4 },
+  wrapperCol: { offset: 18, span: 6 },
 };
 
 interface DeployFormProps {
   selectProject: any;
   deploy: any;
   loading: boolean;
-  initialValues: {};
+  initialValues: any;
 }
 
 interface DeployFormState {
-  project_id: any;
   visible: boolean;
+  project: any;
 }
 
 class DeployForm extends Component<DeployFormProps, DeployFormState> {
@@ -38,8 +32,8 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      project_id: props.initialValues.project_id,
       visible: false,
+      project: {},
     };
   }
 
@@ -48,18 +42,32 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   };
 
   onChange = (value: any) => {
-    this.props.selectProject(value);
-    const { current } = this.form;
-    current.setFieldsValue({ project_id: value, image_name: undefined });
+    queryProjectById(value).then(response => {
+      this.setState({
+        project: response.data,
+        visible: false,
+      });
+      this.props.selectProject(response.data);
+      const { current } = this.form;
+      current.setFieldsValue({ project_id: value, image_name: undefined });
+    });
   };
 
-  onValueChange = (changedValue: any) => {
-    const { project_id } = changedValue;
-    if (project_id !== undefined) {
-      this.setState({
-        project_id,
-      });
+  showDeployConfig = () => {
+    if (this.state.project.id) {
+      this.setState({ visible: true });
+    } else {
+      message.warn('请先选择项目');
     }
+  };
+
+  onSaveDeployConfig = () => {
+    queryProjectById(this.state.project.id).then(response => {
+      this.setState({
+        project: response.data,
+        visible: false,
+      });
+    });
   };
 
   render() {
@@ -67,7 +75,6 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
       <Form
         {...layout}
         onFinish={this.onFinish}
-        onValuesChange={this.onValueChange}
         ref={this.form}
         initialValues={this.props.initialValues}
       >
@@ -83,18 +90,12 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
           name="image_name"
           rules={[{ required: true, message: '请选择镜像' }]}
         >
-          <ImageSelect project_id={this.state.project_id}/>
+          <ImageSelect project_id={this.state.project.id}/>
         </Form.Item>
         <Form.Item {...tailLayout} style={{ textAlign: 'right' }}>
           <SettingOutlined
             style={{ marginRight: 20, fontSize: 18, textAlign: 'center' }}
-            onClick={() => {
-              if (this.state.project_id) {
-                this.setState({ visible: true });
-              } else {
-                message.warn('请先选择项目');
-              }
-            }}
+            onClick={this.showDeployConfig}
           />
           <Button
             type="primary"
@@ -108,44 +109,14 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
       <Drawer
         title="发布配置"
         width={700}
+        destroyOnClose
         visible={this.state.visible}
         onClose={() => this.setState({ visible: false })}
       >
-        <Form
-          {...layout}
-        >
-          <FormList
-            name="command"
-            layout={layout}
-            layoutWithoutLabel={layoutWithoutLabel}
-          />
-          <FormList
-            name="args"
-            layout={layout}
-            layoutWithoutLabel={layoutWithoutLabel}
-          />
-          <PairFormList
-            name="env"
-            label="环境变量"
-            firstPlaceholder="变量名"
-            secondPlaceHolder="值"
-            useNum={false}
-            layout={layout}
-            layoutWithoutLabel={layoutWithoutLabel}
-          />
-          <Form.Item
-            name="cpu"
-            label="cpu"
-          >
-            <PairInput useNum secondPlaceHolder="最小值" firstPlaceholder="最大值"/>
-          </Form.Item>
-          <Form.Item
-            name="memory"
-            label="内存"
-          >
-            <PairInput useNum secondPlaceHolder="最小值" firstPlaceholder="最大值"/>
-          </Form.Item>
-        </Form>
+        <DeployConfigFrom
+          project={this.state.project}
+          onSaveDeployConfig={this.onSaveDeployConfig}
+        />
       </Drawer>
     </>;
   }

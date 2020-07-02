@@ -7,6 +7,13 @@ export async function save(params: any) {
   });
 }
 
+export async function saveDeployConfig(params: any) {
+  return request('/api/project/save/deploy/config', {
+    method: 'POST',
+    data: params,
+  });
+}
+
 export async function list() {
   return request('/api/project/list');
 }
