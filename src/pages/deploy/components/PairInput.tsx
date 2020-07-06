@@ -24,8 +24,8 @@ class PairInput extends Component<PairInputProps, PairInputState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      first: undefined,
-      second: undefined,
+      first: this.props.value ? this.props.value[this.props.names[0]] : undefined,
+      second: this.props.value ? this.props.value[this.props.names[1]] : undefined,
     };
   }
 

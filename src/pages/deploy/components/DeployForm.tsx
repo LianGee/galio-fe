@@ -4,7 +4,6 @@ import ProjectSelect from '@/pages/build/components/ProjectSelect';
 import ImageSelect from '@/pages/deploy/components/ImageSelect';
 import { SettingOutlined } from '@ant-design/icons/lib';
 import DeployConfigFrom from '@/pages/deploy/components/DeployConfigFrom';
-import { queryProjectById } from '@/services/project';
 
 const layout = {
   labelCol: { span: 4 },
@@ -19,11 +18,11 @@ interface DeployFormProps {
   deploy: any;
   loading: boolean;
   initialValues: any;
+  project: any;
 }
 
 interface DeployFormState {
   visible: boolean;
-  project: any;
 }
 
 class DeployForm extends Component<DeployFormProps, DeployFormState> {
@@ -33,7 +32,6 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
     super(props);
     this.state = {
       visible: false,
-      project: {},
     };
   }
 
@@ -42,19 +40,13 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   };
 
   onChange = (value: any) => {
-    queryProjectById(value).then(response => {
-      this.setState({
-        project: response.data,
-        visible: false,
-      });
-      this.props.selectProject(response.data);
-      const { current } = this.form;
-      current.setFieldsValue({ project_id: value, image_name: undefined });
-    });
+    this.props.selectProject(value);
+    const { current } = this.form;
+    current.setFieldsValue({ project_id: value, image_name: undefined });
   };
 
   showDeployConfig = () => {
-    if (this.state.project.id) {
+    if (this.props.project.id) {
       this.setState({ visible: true });
     } else {
       message.warn('请先选择项目');
@@ -62,12 +54,8 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
   };
 
   onSaveDeployConfig = () => {
-    queryProjectById(this.state.project.id).then(response => {
-      this.setState({
-        project: response.data,
-        visible: false,
-      });
-    });
+    this.props.selectProject(this.props.project.id);
+    this.setState({ visible: false });
   };
 
   render() {
@@ -90,7 +78,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
           name="image_name"
           rules={[{ required: true, message: '请选择镜像' }]}
         >
-          <ImageSelect project_id={this.state.project.id}/>
+          <ImageSelect project_id={this.props.project.id}/>
         </Form.Item>
         <Form.Item {...tailLayout} style={{ textAlign: 'right' }}>
           <SettingOutlined
@@ -114,7 +102,7 @@ class DeployForm extends Component<DeployFormProps, DeployFormState> {
         onClose={() => this.setState({ visible: false })}
       >
         <DeployConfigFrom
-          project={this.state.project}
+          project={this.props.project}
           onSaveDeployConfig={this.onSaveDeployConfig}
         />
       </Drawer>

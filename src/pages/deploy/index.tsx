@@ -10,6 +10,7 @@ import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
 import DeployStatus from '@/pages/deploy/components/DeployStatus';
 import { getPageQuery } from '@/utils/utils';
+import { queryProjectById } from '@/services/project';
 
 interface DeployProps {
 
@@ -33,7 +34,7 @@ class Deploy extends Component<DeployProps, DeployState> {
       pods: [],
       events: [],
       loading: false,
-      currentProject: undefined,
+      currentProject: {},
     };
   }
 
@@ -49,11 +50,13 @@ class Deploy extends Component<DeployProps, DeployState> {
     socket.close();
   }
 
-  selectProject = (project: any) => {
-    this.setState({
-      currentProject: project,
+  selectProject = (id: any) => {
+    queryProjectById(id).then(response => {
+      this.setState({
+        currentProject: response.data,
+      });
     });
-    this.updateStatus(project.id);
+    this.updateStatus(id);
   };
 
   updateStatus = (project_id: any) => {
@@ -113,11 +116,12 @@ class Deploy extends Component<DeployProps, DeployState> {
               initialValues={{
                 project_id: project_id ? Number(project_id) : undefined,
               }}
+              project={this.state.currentProject}
             />
           </Col>
         </Row>
         {
-          this.state.currentProject ?
+          this.state.currentProject.id ?
             <Card
               title={<>
                 <Avatar src={this.state.currentProject.logo}/>

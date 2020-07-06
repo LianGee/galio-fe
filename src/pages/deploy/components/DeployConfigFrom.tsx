@@ -76,7 +76,7 @@ class DeployConfigFrom extends Component<DeployConfigFromProps, DeployConfigFrom
           useNum
           firstPlaceholder="最小值"
           secondPlaceHolder="最大值"
-          names={['key', 'value']}
+          names={['request', 'limit']}
         />
       </Form.Item>
       <Form.Item
@@ -87,7 +87,7 @@ class DeployConfigFrom extends Component<DeployConfigFromProps, DeployConfigFrom
           useNum
           firstPlaceholder="最小值"
           secondPlaceHolder="最大值"
-          names={['key', 'value']}
+          names={['request', 'limit']}
         />
       </Form.Item>
       <Form.Item {...layoutWithoutLabel}>
