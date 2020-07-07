@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import DeployForm from '@/pages/deploy/components/DeployForm';
 import PodList from '@/pages/deploy/components/PodList';
-import { deploy } from '@/services/deploy';
-import { Avatar, Badge, Card, Col, Result, Row } from 'antd';
+import { deletePod, deploy } from '@/services/deploy';
+import { Avatar, Card, Col, message, Result, Row } from 'antd';
 import { SelectOutlined, SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
@@ -94,6 +94,18 @@ class Deploy extends Component<DeployProps, DeployState> {
     });
   };
 
+  deletePod = (record: any) => {
+    deletePod({
+      name: record.name,
+      namespace: record.namespace,
+    }).then(response => {
+      if (response.data) {
+        message.success('重启成功');
+        this.updateStatus(this.state.currentProject.id);
+      }
+    });
+  };
+
   render() {
     const { project_id } = getPageQuery();
     return <PageHeaderWrapper>
@@ -131,28 +143,18 @@ class Deploy extends Component<DeployProps, DeployState> {
                   onClick={() => window.open(`http://${this.state.currentProject.domain}`)}
                 />
               </>}
-              extra={<div>
-              <span style={{ marginRight: 8 }}>
-                <TagOutlined style={{ color: '#108ee9' }}/> {this.state.replica.image}
-              </span>
-                {
-                  this.state.replica.status ?
-                    <Badge
-                      status={
-                        this.state.replica.status.replicas === this.state.replica.status.readyReplicas ?
-                          'success' : 'error'
-                      }
-                      text={
-                        <span>
-                             {this.state.replica.status.readyReplicas}/{this.state.replica.status.replicas}
-                        </span>
-                      }
-                    />
-                    : null
-                }
-              </div>}
+              extra={
+                <div>
+                  <span style={{ marginRight: 8 }}>
+                    <TagOutlined style={{ color: '#108ee9' }}/> {this.state.replica.image}
+                  </span>
+                </div>
+              }
             >
-              <PodList pods={this.state.pods}/>
+              <PodList
+                pods={this.state.pods}
+                deletePod={this.deletePod}
+              />
             </Card> :
             <Card>
               <Result

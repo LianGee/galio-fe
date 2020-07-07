@@ -6,3 +6,10 @@ export async function deploy(params: any) {
     data: params,
   });
 }
+
+export async function deletePod(params: any) {
+  return request('/api/deploy/delete/pod', {
+    method: 'delete',
+    data: params,
+  });
+}

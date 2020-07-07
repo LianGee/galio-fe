@@ -3,6 +3,7 @@ import { Button, Table, Tag } from 'antd';
 
 interface PodListProps {
   pods: any;
+  deletePod: any;
 }
 
 interface PodListState {
@@ -42,12 +43,14 @@ class PodList extends Component<PodListProps, PodListState> {
         dataIndex: 'startTime',
         keyIndex: 'startTime',
       },
-      { title: '重启', dataIndex: 'hostIP', keyIndex: 'hostIP' },
       {
         title: '操作',
         width: 150,
         render: (record: any) => <div>
-          <Button size="small">重启</Button>
+          <Button
+            size="small"
+            onClick={() => this.props.deletePod(record)}
+          >重启</Button>
           <Button
             size="small"
             style={{ marginLeft: 5 }}
