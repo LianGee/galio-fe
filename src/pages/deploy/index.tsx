@@ -77,7 +77,11 @@ class Deploy extends Component<DeployProps, DeployState> {
     socket.on('event', (data: any) => {
       const { events } = this.state;
       events.push(data);
-      this.setState({ events });
+      if (events.length > 20) {
+        this.setState({ events: events.slice(events.length - 20, events.length) });
+      } else {
+        this.setState({ events });
+      }
     });
   };
 
@@ -96,6 +100,7 @@ class Deploy extends Component<DeployProps, DeployState> {
 
   deletePod = (record: any) => {
     deletePod({
+      project_id: this.state.currentProject.id,
       name: record.name,
       namespace: record.namespace,
     }).then(response => {

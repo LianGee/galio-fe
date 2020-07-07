@@ -28,13 +28,8 @@ class PodList extends Component<PodListProps, PodListState> {
         dataIndex: 'phase',
         keyIndex: 'phase',
         render: (value: any) => {
-          // todo any other phase
-          const colors = {
-            'Pending': '#108ee9',
-            'Running': '#87d068',
-          };
-          return <Tag color={colors[value]}>
-            {value}
+          return <Tag color={value.color}>
+            {value.text}
           </Tag>;
         },
       },

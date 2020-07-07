@@ -10,7 +10,7 @@ const layout = {
   wrapperCol: { span: 20 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 18, span: 6 },
+  wrapperCol: { offset: 14, span: 10 },
 };
 
 interface DeployFormProps {

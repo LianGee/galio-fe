@@ -1,3 +1,5 @@
+import { PodStatus } from '@/constants/deploy';
+
 export const get_replica_info = (replica: any) => {
   const container = replica.spec.template.spec.containers[0];
   return {
@@ -7,12 +9,13 @@ export const get_replica_info = (replica: any) => {
   };
 };
 
-export const get_event_info = (event: any) => {
-  return {
-    name: event.involvedObject.name,
-    reason: event.reason,
-    type: event.type,
-  };
+const get_container_status = (containerStatus: any) => {
+  const { state } = containerStatus;
+  if (state === undefined) {
+    return PodStatus.UNKNOWN;
+  }
+  const key = Object.keys(state)[0].toUpperCase();
+  return PodStatus[key];
 };
 
 export const get_pods_info = (pods: any) => {
@@ -28,7 +31,7 @@ export const get_pods_info = (pods: any) => {
       podIp: pod.status.podIP,
       hostIP: pod.status.hostIP,
       startTime: pod.status.startTime,
-      phase: pod.status.phase,
+      phase: get_container_status(containerStatus),
       restartCount: containerStatus.restartCount,
     });
   }
