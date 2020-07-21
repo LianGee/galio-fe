@@ -1,5 +1,5 @@
 import path from 'path';
-
+import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 import * as IWebpackChainConfig from 'webpack-chain';
 
 function getModulePackageName(module: { context: string }) {
@@ -22,6 +22,11 @@ function getModulePackageName(module: { context: string }) {
 }
 
 const webpackPlugin = (config: IWebpackChainConfig) => {
+  config.plugin('monaco-editor').use( MonacoWebpackPlugin , [
+    {
+      languages: ['sql']
+    }
+  ]);
   // optimize chunks
   config.optimization
     // share the same chunks across different modules

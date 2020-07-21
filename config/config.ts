@@ -136,6 +136,12 @@ export default defineConfig({
                   icon: 'ConsoleSqlOutlined',
                   component: './resource/database/query/index',
                 },
+                {
+                  name: '发布',
+                  path: '/database/deploy',
+                  icon: 'RadarChartOutlined',
+                  component: './resource/database/deploy/index',
+                },
               ],
             },
             {

@@ -4,7 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import DeployForm from '@/pages/deploy/components/DeployForm';
 import PodList from '@/pages/deploy/components/PodList';
 import { deletePod, deploy } from '@/services/deploy';
-import { Avatar, Card, Col, message, Result, Row } from 'antd';
+import { Avatar, Card, Col, message, notification, Result, Row } from 'antd';
 import { SelectOutlined, SmileOutlined, TagOutlined } from '@ant-design/icons';
 import io from 'socket.io-client';
 import { get_pods_info, get_replica_info } from '@/pages/deploy/DeployUtil';
@@ -19,7 +19,6 @@ interface DeployProps {
 interface DeployState {
   pods: any;
   replica: any;
-  events: any;
   loading: boolean;
   currentProject: any;
 }
@@ -32,7 +31,6 @@ class Deploy extends Component<DeployProps, DeployState> {
     this.state = {
       replica: {},
       pods: [],
-      events: [],
       loading: false,
       currentProject: {},
     };
@@ -63,7 +61,6 @@ class Deploy extends Component<DeployProps, DeployState> {
     this.setState({
       pods: [],
       replica: {},
-      events: [],
     });
     socket.emit('pod', { project_id });
     socket.emit('replica', { project_id });
@@ -75,13 +72,10 @@ class Deploy extends Component<DeployProps, DeployState> {
       this.setState({ replica: get_replica_info(data) });
     });
     socket.on('event', (data: any) => {
-      const { events } = this.state;
-      events.push(data);
-      if (events.length > 20) {
-        this.setState({ events: events.slice(events.length - 20, events.length) });
-      } else {
-        this.setState({ events });
-      }
+      notification.error({
+        description: data.type,
+        message: data.message,
+      });
     });
   };
 
@@ -106,7 +100,6 @@ class Deploy extends Component<DeployProps, DeployState> {
     }).then(response => {
       if (response.data) {
         message.success('重启成功');
-        this.updateStatus(this.state.currentProject.id);
       }
     });
   };
@@ -119,13 +112,12 @@ class Deploy extends Component<DeployProps, DeployState> {
           gutter={[16, 16]}
           justify="space-between"
         >
-          <Col span={this.state.events.length > 0 ? 14 : 2} style={{ textAlign: 'center' }}>
+          <Col span={2} style={{ textAlign: 'center' }}>
             <DeployStatus
               replica={this.state.replica}
-              events={this.state.events}
             />
           </Col>
-          <Col span={this.state.events.length > 0 ? 10 : 22}>
+          <Col span={22}>
             <DeployForm
               selectProject={this.selectProject}
               loading={this.state.loading}

@@ -71,7 +71,9 @@
     "react-ace": "^8.1.0",
     "ace-builds": "^1.4.9",
     "sql-formatter": "^2.3.3",
-    "react-json-view": "^1.19.1"
+    "react-json-view": "^1.19.1",
+    "react-monaco-editor": "0.39.1",
+    "monaco-editor-webpack-plugin": "^1.9.0"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^1.0.18",
