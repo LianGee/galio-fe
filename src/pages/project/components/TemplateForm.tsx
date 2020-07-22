@@ -34,9 +34,14 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
   };
 
   render() {
+    const layout = {
+      labelCol: { span: 2 },
+      wrapperCol: { span: 22 },
+    };
     return <Form
       ref={this.props.form}
       initialValues={this.props.template}
+      {...layout}
     >
       <Form.Item label="id" name='id' style={{ display: 'none' }}>
         <Input/>
@@ -59,7 +64,10 @@ class TemplateForm extends Component<TemplateFormProps, TemplateFormState> {
       >
         <Input/>
       </Form.Item>
-      <Form.Item label="内容" name="content" required>
+      <Form.Item
+        label="内容"
+        name="content"
+      >
         <TemplateEditor mode={this.state.mode}/>
       </Form.Item>
     </Form>;

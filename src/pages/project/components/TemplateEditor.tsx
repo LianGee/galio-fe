@@ -56,18 +56,19 @@ class TemplateEditor extends Component<TemplateEditorProps, TemplateEditorState>
   };
 
   render() {
-    return <>
+    return <div>
       <MonacoEditor
         height={400}
-        width="100%"
         theme="vs-dark"
         language={this.props.mode}
         defaultValue={this.props.value}
         options={{
-          selectOnLineNumbers: true,
-          roundedSelection: false,
+          scrollBeyondLastLine: false,
           cursorStyle: 'line',
           readOnly: this.state.previewing,
+          minimap: {
+            enabled: false,
+          },
         }}
         onChange={this.props.onChange}
         editorDidMount={this.editorDidMount}
@@ -98,7 +99,7 @@ class TemplateEditor extends Component<TemplateEditorProps, TemplateEditorState>
           </Col>
         </Row>
       </div>
-    </>;
+    </div>;
   }
 }
 
