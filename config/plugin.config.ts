@@ -22,14 +22,14 @@ function getModulePackageName(module: { context: string }) {
 }
 
 const webpackPlugin = (config: IWebpackChainConfig) => {
-  config.plugin('monaco-editor').use( MonacoWebpackPlugin , [
+  config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
     {
-      languages: ['sql']
-    }
+      languages: ['sql', 'yaml', 'dockerfile'],
+    },
   ]);
   // optimize chunks
   config.optimization
-    // share the same chunks across different modules
+  // share the same chunks across different modules
     .runtimeChunk(false)
     .splitChunks({
       chunks: 'async',

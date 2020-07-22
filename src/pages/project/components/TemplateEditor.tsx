@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-dockerfile';
-import 'ace-builds/src-noconflict/mode-nginx';
-import 'ace-builds/src-noconflict/mode-yaml';
-import 'ace-builds/src-noconflict/theme-monokai';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Col, Row } from 'antd';
 import { preview } from '@/services/templates';
 import ProjectSelect from '@/pages/build/components/ProjectSelect';
+import MonacoEditor from 'react-monaco-editor';
 
 interface TemplateEditorProps {
   mode: string;
@@ -42,34 +38,40 @@ class TemplateEditor extends Component<TemplateEditorProps, TemplateEditorState>
       project_id: this.state.project_id,
     }).then(response => {
       this.setState({ content: this.props.value, loading: false });
-      this.editor.editor.setValue(response.data);
+      this.editor.setValue(response.data);
     });
   };
 
   onEdit = () => {
     this.setState({ previewing: false });
-    this.editor.editor.setValue(this.state.content);
+    this.editor.setValue(this.state.content);
   };
 
   selectProject = (value: any) => {
     this.setState({ project_id: value });
   };
 
+  editorDidMount = (editor: any) => {
+    this.editor = editor;
+  };
+
   render() {
     return <>
-      <AceEditor
-        ref={(ref: any) => {
-          this.editor = ref;
+      <MonacoEditor
+        height={400}
+        width="100%"
+        theme="vs-dark"
+        language={this.props.mode}
+        defaultValue={this.props.value}
+        options={{
+          selectOnLineNumbers: true,
+          roundedSelection: false,
+          cursorStyle: 'line',
+          readOnly: this.state.previewing,
         }}
-        mode={this.props.mode}
-        theme="monokai"
-        name="template-editor"
-        style={{ width: '100%' }}
-        value={this.props.value}
         onChange={this.props.onChange}
-        readOnly={this.state.previewing}
+        editorDidMount={this.editorDidMount}
       />
-      <div id="template-editor"/>
       <div style={{ position: 'absolute', zIndex: 9999, top: 20, right: 40 }}>
         <Row style={{ width: 200 }}>
           <Col span={20} style={{ marginRight: 5 }}>

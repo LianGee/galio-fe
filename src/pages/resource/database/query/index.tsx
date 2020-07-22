@@ -3,13 +3,11 @@ import { Component, createRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Col, Row } from 'antd';
 import SelectDBForm from '@/pages/resource/components/SelectDBForm';
-import AceEditor from 'react-ace';
 import { PlayCircleOutlined, RetweetOutlined } from '@ant-design/icons';
 import { getTablesInfo, query } from '@/services/database';
 import sqlFormatter from 'sql-formatter';
+import MonacoEditor from 'react-monaco-editor';
 import TableList from '../../components/TableList';
-import 'ace-builds/src-noconflict/mode-mysql';
-import 'ace-builds/src-noconflict/theme-monokai';
 import QueryResult from '../../components/QueryResult';
 
 
@@ -79,6 +77,31 @@ class Query extends Component<QueryProps, QueryState> {
     });
   };
 
+  getSuggestions: any = (monaco: any) => {
+    return {
+      suggestions: [
+        {
+          label: 'select',
+          kind: monaco.languages.CompletionItemKind.Function,
+          insertText: 'select',
+        },
+        {
+          label: 'from',
+          kind: monaco.languages.CompletionItemKind.Function,
+          insertText: 'from',
+        },
+      ],
+    };
+  };
+
+  editorDidMount = (editor: any, monaco: any) => {
+    monaco.languages.registerCompletionItemProvider('sql', {
+      provideCompletionItems: () => {
+        return this.getSuggestions(monaco);
+      },
+    });
+  };
+
   render() {
     return <PageHeaderWrapper>
       <Row style={{ backgroundColor: 'white' }}>
@@ -87,17 +110,22 @@ class Query extends Component<QueryProps, QueryState> {
           <TableList data={this.state.table_info} clickQuery={this.clickQuery}/>
         </Col>
         <Col span={16}>
-          <AceEditor
-            mode="mysql"
-            theme="monokai"
-            name="editor"
-            fontSize={16}
+          <MonacoEditor
+            height={300}
+            theme="vs-dark"
+            language="sql"
             value={this.state.sql}
-            height="300px"
-            style={{ width: '100%' }}
             onChange={(value: any) => this.setState({ sql: value })}
+            options={{
+              scrollBeyondLastLine: false,
+              selectOnLineNumbers: true,
+              roundedSelection: false,
+              cursorStyle: 'line',
+              readOnly: true,
+              fontSize: 16,
+            }}
+            editorDidMount={this.editorDidMount}
           />
-          <div id="editor"/>
           <div style={{ position: 'absolute', top: 10, right: 30 }}>
             <Button
               shape="circle"

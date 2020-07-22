@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Col, Progress, Row } from 'antd';
-import * as moment from 'moment';
 
 interface DeployStatusProps {
   replica: any;
@@ -32,20 +31,6 @@ class DeployStatus extends Component<DeployStatusProps, DeployStatusState> {
       }
     }
   }
-
-  parseEvents = (events: any) => {
-    const evs = [];
-    for (let i = 0; i < events.length; i += 1) {
-      evs.push({
-        key: i,
-        type: events[i].type,
-        message: events[i].message,
-        reason: events[i].reason,
-        eventTime: moment(events[i].eventTime),
-      });
-    }
-    return evs.sort((a, b) => a.eventTime.valueOf() - b.eventTime.valueOf());
-  };
 
   render() {
     return <Row align="top" justify="space-between">

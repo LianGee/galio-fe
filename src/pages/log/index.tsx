@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
-import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-text';
-import 'ace-builds/src-noconflict/theme-github';
-import 'ace-builds/src-noconflict/theme-monokai';
 import io from 'socket.io-client';
 import { getPageQuery } from '@/utils/utils';
-import { Button, Col, Input, InputNumber, Layout, Row, Select, Switch } from 'antd';
-import {
-  CaretDownOutlined,
-  CaretUpOutlined,
-  VerticalAlignBottomOutlined,
-  VerticalAlignTopOutlined,
-} from '@ant-design/icons';
+import { Button, Col, InputNumber, Layout, Row, Select, Switch } from 'antd';
+import MonacoEditor from 'react-monaco-editor';
 import styles from './index.less';
 
 interface LogProps {
@@ -21,7 +12,7 @@ interface LogProps {
 interface LogState {
   logs: any;
   pod: any;
-  theme: 'monokai' | 'github';
+  theme: 'vs-dark' | 'vs-light';
   fontSize: number;
   tail_lines: number;
   trace: boolean;
@@ -29,7 +20,6 @@ interface LogState {
 
 const socket = io('http://127.0.0.1:8010/galio/deploy');
 const { Header, Footer, Content } = Layout;
-const { Search } = Input;
 const { Option } = Select;
 
 class Log extends Component<LogProps, LogState> {
@@ -42,7 +32,7 @@ class Log extends Component<LogProps, LogState> {
     this.state = {
       logs: [],
       pod: getPageQuery(),
-      theme: 'github',
+      theme: 'vs-dark',
       fontSize: 12,
       tail_lines: 100,
       trace: true,
@@ -85,24 +75,22 @@ class Log extends Component<LogProps, LogState> {
         logs = logs.slice(logs.length - 10000, logs.length + 1);
       }
       logs.push(data);
-      setTimeout(() => {
-        this.editor.editor.gotoLine(this.state.logs.length);
-      }, 400);
-    });
-    this.interval = setInterval(() => {
-      if (this.state.trace) {
-        const maxLen = this.state.tail_lines;
-        if (logs.length > maxLen) {
-          this.setState({
-            logs: logs.slice(logs.length - maxLen, logs.length + 1),
-          });
-        } else {
-          this.setState({
-            logs,
-          });
+      this.editor.setPosition({ lineNumber: logs.length, column: data.length });
+      this.interval = setInterval(() => {
+        if (this.state.trace) {
+          const maxLen = this.state.tail_lines;
+          if (logs.length > maxLen) {
+            this.setState({
+              logs: logs.slice(logs.length - maxLen, logs.length + 1),
+            });
+          } else {
+            this.setState({
+              logs,
+            });
+          }
         }
-      }
-    }, 200);
+      }, 200);
+    });
   };
 
   prevLog = () => {
@@ -112,6 +100,10 @@ class Log extends Component<LogProps, LogState> {
   downLoad = () => {
     const { name, namespace } = this.state.pod;
     window.open(`/api/deploy/download/log?name=${name}&namespace=${namespace}&tail_lines=${100000}`);
+  };
+
+  editorDidMount = (editor: any) => {
+    this.editor = editor;
   };
 
   render() {
@@ -136,11 +128,11 @@ class Log extends Component<LogProps, LogState> {
               style={{ marginLeft: 5 }}
               onClick={() => {
                 const { theme } = this.state;
-                if (theme === 'github') {
-                  this.setState({ theme: 'monokai' });
+                if (theme === 'vs-dark') {
+                  this.setState({ theme: 'vs-light' });
                 } else {
                   this.setState({
-                    theme: 'github',
+                    theme: 'vs-dark',
                   });
                 }
               }}
@@ -149,63 +141,26 @@ class Log extends Component<LogProps, LogState> {
           <Col span={12} style={{ textAlign: 'center' }}>
             <strong>{this.state.pod.name} 日志</strong>
           </Col>
-          <Col span={6}>
-            <Search
-              style={{ float: 'right', marginRight: 10, marginTop: 10, border: 'none' }}
-              placeholder="搜索日志"
-              onSearch={(value: any) => {
-                this.editor.editor.find(value);
-              }}
-              addonAfter={<div>
-                <CaretUpOutlined onClick={() => {
-                  this.editor.editor.findPrevious();
-                }}/>
-                <CaretDownOutlined
-                  style={{ marginLeft: 8 }}
-                  onClick={() => {
-                    this.editor.editor.findNext();
-                  }}
-                />
-                <VerticalAlignTopOutlined
-                  style={{ marginLeft: 8 }}
-                  onClick={() => {
-                    this.editor.editor.gotoLine(1);
-                    this.editor.editor.findNext();
-                  }}
-                />
-                <VerticalAlignBottomOutlined
-                  style={{ marginLeft: 8 }}
-                  onClick={() => {
-                    this.editor.editor.gotoLine(
-                      this.state.tail_lines,
-                    );
-                    this.editor.editor.findPrevious();
-                  }}
-                />
-              </div>}
-            />
-          </Col>
         </Row>
       </Header>
       <Content className={styles.content}>
-        <AceEditor
-          ref={(ref: any) => {
-            this.editor = ref;
-          }}
-          mode="text"
+        <MonacoEditor
+          height="100%"
+          width="100%"
           theme={this.state.theme}
-          name="log"
           value={this.state.logs.join('\n')}
-          readOnly
-          style={{ width: '100%', height: '100%' }}
-          setOptions={{
-            autoScrollEditorIntoView: true,
-            wrap: true,
-            showPrintMargin: false,
+          options={{
+            scrollBeyondLastLine: false,
+            scrollbar: {
+              vertical: 'hidden',
+              horizontal: 'hidden',
+            },
+            cursorStyle: 'line',
+            readOnly: true,
+            fontSize: this.state.fontSize,
           }}
-          fontSize={this.state.fontSize}
+          editorDidMount={this.editorDidMount}
         />
-        <div id="log"/>
       </Content>
       <Footer className={styles.footer}>
         行数

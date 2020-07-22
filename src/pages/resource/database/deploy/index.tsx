@@ -60,7 +60,7 @@ class DBDeploy extends Component<DBDeployProps, DBDeployState> {
         height={400}
         theme="vs-dark"
         language="sql"
-        defaultValue={this.state.data}
+        value={this.state.data}
         options={{
           selectOnLineNumbers: true,
           roundedSelection: false,
